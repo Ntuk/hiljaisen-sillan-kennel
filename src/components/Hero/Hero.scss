@@ -1,0 +1,19 @@
+.hero-container {
+  height: 90vh;
+  background-image: url('../../assets/hero-bg2.jpeg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-spacer {
+  position: absolute;
+  bottom: 10vh;
+  aspect-ratio: 960/300;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-image: url('../../assets/hero-curve.svg');
+}

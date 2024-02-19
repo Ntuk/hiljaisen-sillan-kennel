@@ -1,0 +1,17 @@
+.about-container {
+  height: 90vh;
+  background: #CB997E;
+  position: relative;
+}
+
+.about-spacer {
+  position: absolute;
+  bottom: 0;
+  aspect-ratio: 960/300;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-image: url('../../assets/about-curve.svg');
+}
+
