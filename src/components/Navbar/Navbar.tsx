@@ -70,7 +70,7 @@ function Navbar() {
             ) : null}
             <ScrollLink
               to={item.toLowerCase()}
-              smooth={true}
+              smooth={false}
               duration={100}
               spy={true}
               activeClass="active"

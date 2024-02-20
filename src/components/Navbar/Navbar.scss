@@ -1,12 +1,20 @@
-header {
+@font-face {
+  font-family: 'Gaby';
+  src: url('../../assets/gaby.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+  header {
   display: flex;
   position: fixed;
   align-items: center;
-  background: rgba(239, 209, 191, 0.9);
   height: 5rem;
   width: 100%;
   z-index: 9;
   box-shadow: 0 1px 3px 1px rgba(24, 60, 52, 0.16);
+  background: url('../../assets/navbar-curve.svg') no-repeat;
+  background-size: cover;
 
   .header-left {
     display: inline-flex;
@@ -27,13 +35,12 @@ header {
     }
 
     .header-text {
-      font-family: fantasy;
+      font-family: 'Gaby', sans-serif;
       text-wrap: nowrap;
       font-size: 2rem;
       display: flex;
       align-items: center;
       padding-left: 1rem;
-      padding-top: 0.5rem;
       user-select: none;
 
       &:hover {
@@ -54,16 +61,22 @@ header {
       display: flex;
       align-items: center;
       height: 100%;
-      padding: 0 1.5rem;
       user-select: none;
       position: relative;
       overflow: hidden;
       z-index: 1;
       outline: none;
 
+      a {
+        z-index: 2;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 0 1.5rem;
+      }
+
       .active {
         color: black;
-        //font-weight: 800;
       }
 
       .icon {
@@ -75,15 +88,18 @@ header {
         pointer-events: none;
       }
 
-      a {
-        z-index: 2;
-        height: 100%;
-        display: flex;
-        align-items: center;
-      }
-
       &:hover {
         cursor: pointer;
+        background: rgba(243, 223, 215, 0.3);
+      }
+
+      &:focus {
+        cursor: pointer;
+        background: rgba(243, 223, 215, 0.4);
+      }
+
+      &:active {
+        background: rgba(243, 223, 215, 0.5);
       }
     }
   }

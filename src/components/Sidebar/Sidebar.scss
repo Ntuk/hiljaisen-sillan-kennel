@@ -1,0 +1,42 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 0;
+  top: 30%;
+  background: #D9B99B;
+  border-radius: 4px 0 0 4px;
+  box-shadow: 0 1px 3px 1px rgba(24, 60, 52, 0.16);
+  z-index: 1;
+
+  a {
+    padding: 1rem;
+
+    &:hover {
+      cursor: pointer;
+      background: rgba(243, 223, 215, 0.3);
+
+      .sidebar-icon {
+        color: #6c3015;
+      }
+    }
+
+    &:focus {
+      cursor: pointer;
+      background: rgba(243, 223, 215, 0.4);
+    }
+
+    &:active {
+      background: rgba(243, 223, 215, 0.5);
+    }
+
+    &:not(:last-child) {
+      padding-bottom: 1rem;
+    }
+
+    .sidebar-icon {
+      font-size: 2rem;
+      color: black;
+    }
+  }
+}
