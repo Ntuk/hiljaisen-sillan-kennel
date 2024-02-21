@@ -1,17 +1,49 @@
+@font-face {
+  font-family: 'Gaby';
+  src: url('../../assets/gaby.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .about-container {
-  height: 90vh;
+  min-height: 90vh;
   background: #CB997E;
   position: relative;
+  padding-bottom: 20rem;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 5rem;
+
+  .about-header {
+    font-family: 'Gaby', sans-serif;
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .about-text {
+    display: flex;
+
+    img {
+      max-width: 400px;
+      border-radius: 50%;
+      border: 2px solid #2a231d;
+    }
+  }
 }
 
 .about-spacer {
   position: absolute;
   bottom: 0;
+  pointer-events: none;
   aspect-ratio: 960/300;
   width: 100%;
-  height: 100%;
+  height: 20rem;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: bottom;
   background-size: cover;
   background-image: url('../../assets/about-curve2.svg');
 }

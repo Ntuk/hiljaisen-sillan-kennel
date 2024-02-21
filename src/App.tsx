@@ -6,6 +6,7 @@ import Dogs from "./components/Dogs/Dogs.tsx";
 import Gallery from "./components/Gallery/Gallery.tsx";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import Sidebar from "./components/Sidebar/Sidebar.tsx";
+// import Admin from "./components/Admin/Admin.tsx";
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
       <Navbar />
       <Sidebar />
       <Hero />
+      {/*<Admin />*/}
       <News />
       <About />
       <Dogs />
