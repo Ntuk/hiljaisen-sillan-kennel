@@ -1,10 +1,19 @@
 .hero-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 90vh;
   background-image: url('../../assets/hero-bg5.jpeg');
   background-size: cover;
   background-position: center;
-  display: flex;
   flex-direction: column;
+}
+
+.hero-text {
+  font-size: 8rem;
+  font-family: 'Gaby';
+  text-shadow: -1px 0 black, 0 3px black, 3px 0 black, 0 -1px black;
+  color: #fff;
 }
 
 .hero-spacer {
@@ -17,4 +26,11 @@
   background-position: center;
   background-size: cover;
   background-image: url('../../assets/hero-curve.svg');
+}
+
+
+@media only screen and (max-width: 1265px) {
+  .hero-text {
+    font-size: 4rem;
+  }
 }

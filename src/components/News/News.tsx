@@ -77,7 +77,7 @@ function News() {
   return (
     <section id={'uutiset'} data-scroll={'uutiset'} className={'news-container'}>
       <div className={'news-content'}>
-        <span className={'news-header'}>Uutiset</span>
+        <span className={'news-header'}>Ajankohtaista</span>
         <div className={'posts-container'}>
           <div className={'posts'}>
             {data.slice(0, 3).map(item => (
@@ -88,6 +88,7 @@ function News() {
                   date={item.date}
                   isOpen={!!isOpen[item.id]}
                   onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
+                  fullScreen={window.innerWidth <= 1265}
                 >
                   <div className={'dialog-main-container'}>
                     <div className={'dialog-image'}>
@@ -121,6 +122,7 @@ function News() {
                   date={item.date}
                   isOpen={!!isOpen[item.id]}
                   onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
+                  fullScreen={window.innerWidth <= 1265}
                 >
                   <div className={'dialog-main-container'}>
                     <div className={'dialog-image'}>
@@ -131,6 +133,7 @@ function News() {
                 </Dialog>
                 <div className={'mini-post-card'}>
                   <img src={item.imageUrl} alt={item.title} onClick={() => toggleDialog(item.id)}/>
+                  <span className={'mini-post-date'}>{item.date}</span>
                   <div className={'mini-post-header'}>{item.title}</div>
                 </div>
               </div>
