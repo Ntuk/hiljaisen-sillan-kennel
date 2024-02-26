@@ -17,7 +17,7 @@
   flex-direction: column;
   width: 100%;
   padding: 0 5rem;
-  margin-top: 5rem;
+  //margin-top: 5rem;
 
   .news-header {
     font-family: 'Gaby', sans-serif;
@@ -27,9 +27,11 @@
 
   .posts-container {
     display: flex;
+    width: 100%;
+    justify-content: space-between;
 
     .posts {
-      width: 70%;
+      //width: 70%;
       max-width: 60rem;
 
       .post-card {
@@ -43,6 +45,7 @@
 
         &:hover {
           cursor: pointer;
+          box-shadow: 0 0 0 1px rgba(24, 60, 52, 0.08), 0 4px 12px 0 rgba(24, 60, 52, 0.24);
         }
 
         &:not(:first-child) {
@@ -51,8 +54,8 @@
 
         .post-image img {
           object-fit: cover;
-          width: 200px;
-          height: auto;
+          max-width: 200px;
+          height: 100%;
           border-right: 2px solid #2a231d;
         }
 
@@ -73,7 +76,7 @@
 
             .post-header {
               margin-bottom: 0.5rem;
-              font-size: 16px;
+              font-size: 18px;
               font-weight: 600;
             }
 
@@ -95,11 +98,64 @@
       align-items: end;
       flex-direction: column;
       padding: 0 1rem;
-      width: 30%;
+      //width: 30%;
+      width: 30rem;
 
       .post-header {
         font-family: 'Gaby', sans-serif;
         font-size: 1.5rem;
+      }
+
+      .post-link {
+        width: 100%;
+        height: 4rem;
+
+        &:not(:first-child) {
+          margin-top: 1rem;
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        .mini-post-card {
+          display: flex;
+          align-items: center;
+          margin-top: 1rem;
+          border: 2px solid #2a231d;
+          height: 4rem;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: cover;
+          background-image: url('../../assets/post-bg.svg');
+          border-radius: 4px;
+          box-sizing: border-box;
+
+          img {
+            width: 4rem;
+            height: calc(4rem - 4px);
+            margin-right: 1rem;
+            object-fit: cover;
+            border-right: 2px solid #2a231d;
+            border-radius: 2px 0 0 2px;
+          }
+
+          .mini-post-header {
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+          }
+
+
+          &:hover {
+            cursor: pointer;
+            box-shadow: 0 0 0 1px rgba(24, 60, 52, 0.08), 0 4px 12px 0 rgba(24, 60, 52, 0.24);
+          }
+        }
       }
     }
   }

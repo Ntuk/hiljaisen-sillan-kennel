@@ -1,4 +1,6 @@
 import './App.scss'
+import { useEffect } from "react";
+import { firebaseApp } from "./firebase/firebase.ts";
 import Hero from "./components/Hero/Hero.tsx";
 import About from "./components/About/About.tsx";
 import News from "./components/News/News.tsx";
@@ -10,13 +12,17 @@ import Sidebar from "./components/Sidebar/Sidebar.tsx";
 
 function App() {
 
+  useEffect(() => {
+    firebaseApp;
+  }, []);
+
   return (
     <>
       <Navbar />
       <Sidebar />
       <Hero />
-      {/*<Admin />*/}
       <News />
+      {/*<Admin />*/}
       <About />
       <Dogs />
       <Gallery />

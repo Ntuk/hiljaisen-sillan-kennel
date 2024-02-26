@@ -1,10 +1,78 @@
 import './News.scss';
-import testImage from '../../assets/esimerkki.jpg';
-import Dialog from "../Dialog/Dialog.tsx";
-import { useState } from "react";
+import Dialog from '../Dialog/Dialog.tsx';
+import { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/firebase.ts';
+
+interface NewsData {
+  id: string;
+  date: string;
+  title: string;
+  content: string;
+  imageUrl: string;
+  views: number;
+}
 
 function News() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<{ [id: string]: boolean }>({});
+  const [data, setData] = useState<NewsData[]>([]);
+
+  useEffect(() => {
+    const fetchNewsData = async () => {
+      const newsCollection = collection(db, 'news');
+      const newsSnapshot = await getDocs(newsCollection);
+      const newsList: NewsData[] = newsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        title: doc.data().title,
+        content: doc.data().content,
+        date: new Date(doc.data().date.seconds * 1000).toLocaleDateString('fi-FI', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }),
+        imageUrl: doc.data().imageUrl,
+        views: doc.data().views,
+      }));
+
+      newsList.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      setData(newsList);
+    };
+
+    fetchNewsData();
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        for (const id in isOpen) {
+          if (isOpen[id]) {
+            setIsOpen(prevState => ({
+              ...prevState,
+              [id]: false,
+            }));
+          }
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
+
+  const toggleDialog = (id: string) => {
+    setIsOpen(prevState => ({
+      ...prevState,
+      [id]: !prevState[id] || false,
+    }));
+  };
 
   return (
     <section id={'uutiset'} data-scroll={'uutiset'} className={'news-container'}>
@@ -12,84 +80,67 @@ function News() {
         <span className={'news-header'}>Uutiset</span>
         <div className={'posts-container'}>
           <div className={'posts'}>
-            <div className={'post-card'} onClick={() => setIsOpen(!isOpen)}>
-              <Dialog
-                heading={'Otsikko'}
-                date={'11.12.1986'}
-                isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
-              >
-                <div className={'dialog-main-container'}>
-                  <div className={'dialog-image'}>
-                    <img src={testImage}/>
+            {data.slice(0, 3).map(item => (
+              <div key={item.id} className={'post-card'} onClick={() => toggleDialog(item.id)}>
+                <Dialog
+                  key={item.id}
+                  heading={item.title}
+                  date={item.date}
+                  isOpen={!!isOpen[item.id]}
+                  onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
+                >
+                  <div className={'dialog-main-container'}>
+                    <div className={'dialog-image'}>
+                      <img src={item.imageUrl} alt={item.title}/>
+                    </div>
+                    <div className={'dialog-text'} dangerouslySetInnerHTML={{__html: item.content}}/>
                   </div>
-                  <div className={'dialog-text'}>
-                    The standard Lorem Ipsum passage, used since the 1500s
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
-                    Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC
-                    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
-                  </div>
+                </Dialog>
+                <div className={'post-image'}>
+                  <img src={item.imageUrl} alt={item.title}/>
                 </div>
-              </Dialog>
-              <div className={'post-image'}>
-                <img src={testImage}/>
-              </div>
-              <div className={'post-content-container'}>
-                <div className={'post-main-info'}>
-                  <div className={'post-date'}>11.12.1986</div>
-                  <div className={'post-header'}>Otsikko</div>
-                  <div className={'post-preview'}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et
-                    dolore magna aliqua. Ut enim ad minim veniam
+                <div className={'post-content-container'}>
+                  <div className={'post-main-info'}>
+                    <div className={'post-date'}>{item.date}</div>
+                    <div className={'post-header'}>{item.title}</div>
+                    <div className={'post-preview'}
+                         dangerouslySetInnerHTML={{__html: item.content.length > 240 ? item.content.substring(0, 240) + "..." : item.content}}/>
                   </div>
+                  <div className={'post-meta'}>{item.views} katselukertaa</div>
                 </div>
-                <div className={'post-meta'}>8 Katselukertaa</div>
               </div>
-            </div>
-            <div className={'post-card'} onClick={() => setIsOpen(!isOpen)}>
-              <div className={'post-image'}>
-                <img src={testImage}/>
-              </div>
-              <div className={'post-content-container'}>
-                <div className={'post-main-info'}>
-                  <div className={'post-date'}>11.12.1986</div>
-                  <div className={'post-header'}>Otsikko</div>
-                  <div className={'post-preview'}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et
-                    dolore magna aliqua. Ut enim ad minim veniam
-                  </div>
-                </div>
-                <div className={'post-meta'}>8 Katselukertaa</div>
-              </div>
-            </div>
+            ))}
           </div>
           <div className={'post-list'}>
             <span className={'post-header'}>Vanhemmat uutiset</span>
-            <span>Uusi sear Cordoba TDI Diesel</span>
-            <span>Pentu-uutisia</span>
-            <span>Pentuja tulossa</span>
-            <span>Näyttely oli menestys</span>
-            <span>Näyttelyt lähestyvät</span>
+            {data.slice(3).map(item => (
+              <div key={item.id} className={'post-link'} onClick={() => toggleDialog(item.id)}>
+                <Dialog
+                  key={item.id}
+                  heading={item.title}
+                  date={item.date}
+                  isOpen={!!isOpen[item.id]}
+                  onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
+                >
+                  <div className={'dialog-main-container'}>
+                    <div className={'dialog-image'}>
+                      <img src={item.imageUrl} alt={item.title}/>
+                    </div>
+                    <div className={'dialog-text'} dangerouslySetInnerHTML={{__html: item.content}}/>
+                  </div>
+                </Dialog>
+                <div className={'mini-post-card'}>
+                  <img src={item.imageUrl} alt={item.title} onClick={() => toggleDialog(item.id)}/>
+                  <div className={'mini-post-header'}>{item.title}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-        {/*The standard Lorem Ipsum passage, used since the 1500s*/}
-        {/*"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."*/}
-
-        {/*Section 1.10.32 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC*/}
-        {/*"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"*/}
-
-        {/*1914 translation by H. Rackham*/}
-        {/*"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?"*/}
-
-        {/*Section 1.10.33 of "de Finibus Bonorum et Malorum", written by Cicero in 45 BC*/}
-        {/*"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat."*/}
       </div>
       <div className={'news-spacer'}/>
     </section>
-  )
+  );
 }
 
-export default News
+export default News;

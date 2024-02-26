@@ -1,15 +1,21 @@
 import ImageUploading from 'react-images-uploading';
-import { ImageType, ImageListType } from "react-images-uploading/dist/typings";
+import { ImageType } from "react-images-uploading/dist/typings";
 import { useState } from "react";
 
-function ImageUpload() {
+interface ImageUploadProps {
+  onImageUpload: (images: ImageType[]) => void;
+  onBase64Upload: (base64Images: string[]) => void; // Add callback for base64 images
+}
+
+function ImageUpload({ onImageUpload, onBase64Upload }: ImageUploadProps) {
   const [images, setImages] = useState<ImageType[]>([]);
   const maxNumber = 69;
 
-  const onChange = (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex);
+  const onChange = (imageList: ImageType[]) => {
+    const base64Images = imageList.map((image) => image.data_url);
     setImages(imageList);
+    onImageUpload(imageList);
+    onBase64Upload(base64Images);
   };
 
   return (
@@ -23,23 +29,21 @@ function ImageUpload() {
       {({
           imageList,
           onImageUpload,
-          onImageRemoveAll,
           onImageUpdate,
           onImageRemove,
           isDragging,
           dragProps,
         }) => (
-        // write your building UI
         <div className="upload__image-wrapper">
           <button
+            type={'button'}
             style={isDragging ? {color: 'red'} : undefined}
             onClick={onImageUpload}
             {...dragProps}
           >
-            Klikkaa tai pudota tähän
+            Valitse kuva
           </button>
           &nbsp;
-          <button onClick={onImageRemoveAll}>Poista kaikki kuvat</button>
           {imageList.map((image, index) => (
             <div key={index} className="image-item">
               <img src={image['data_url']} alt="" width="100"/>
@@ -52,7 +56,7 @@ function ImageUpload() {
         </div>
       )}
     </ImageUploading>
-  )
+  );
 }
 
-export default ImageUpload
+export default ImageUpload;

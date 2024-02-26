@@ -1,5 +1,5 @@
 .admin-container {
-  min-height: 100vh;
+  min-height: 90vh;
   background: #D9B99B;
   position: relative;
   padding-bottom: 20rem;
@@ -10,7 +10,7 @@
   flex-direction: column;
   width: 100%;
   padding: 0 5rem;
-  margin-top: 5rem;
+  padding-top: 5rem;
 
   span {
     display: block;
@@ -19,6 +19,4 @@
   .item {
     margin-bottom: 1rem;
   }
-
-
 }
