@@ -14,18 +14,28 @@
 
 .about-content {
   display: flex;
-  flex-direction: column;
   width: 100%;
   padding: 0 5rem;
 
-  .about-header {
-    font-family: 'Gaby', sans-serif;
-    font-size: 4rem;
-    margin-bottom: 1rem;
+  .about-header-text-container {
+    display: flex;
+    flex-direction: column;
+
+    .about-header {
+      font-family: 'Gaby', sans-serif;
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-text {
+      display: flex;
+      margin-right: 5rem;
+    }
   }
 
-  .about-text {
+  .about-image {
     display: flex;
+    align-items: end;
 
     img {
       max-width: 400px;
