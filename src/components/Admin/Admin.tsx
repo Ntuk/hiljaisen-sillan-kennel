@@ -83,20 +83,24 @@ function Admin() {
     <section id={'admin'} data-scroll={'admin'} className={'admin-container'}>
       <div className={'admin-content'}>
         <form onSubmit={handleSubmit}>
-          <div className={'item'}>
-            <span>Otsikko:</span>
-            <input type="text" name="name" ref={titleRef}/>
-          </div>
-          <div className={'item'}>
-            <span>Lisää kuva:</span>
-            <ImageUpload onImageUpload={handleImageUpload} onBase64Upload={handleBase64Upload} />
-          </div>
-          <div className={'item'}>
-            Postauksen teksti:
-            <TextEditor ref={textEditorRef} onSubmit={handleTextEditorSubmit} />
+          <div className={'items-container'}>
+            <div className={'text-items'}>
+              <div className={'item header'}>
+                <span>Otsikko:</span>
+                <input type="text" name="name" ref={titleRef}/>
+              </div>
+              <div className={'item'}>
+                <span>Uutinen:</span>
+                <TextEditor ref={textEditorRef} onSubmit={handleTextEditorSubmit}/>
+              </div>
+            </div>
+            <div className={'item'}>
+              <span>Lisää kuva:</span>
+              <ImageUpload onImageUpload={handleImageUpload} onBase64Upload={handleBase64Upload}/>
+            </div>
           </div>
           <br/>
-          <button type="submit">Lähetä</button>
+          <button className={'painike'} type="submit">Lähetä</button>
         </form>
       </div>
     </section>

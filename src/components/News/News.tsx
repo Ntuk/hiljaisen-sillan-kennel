@@ -6,7 +6,7 @@ import { db } from '../../firebase/firebase.ts';
 
 interface NewsData {
   id: string;
-  date: string;
+  date: Date;
   title: string;
   content: string;
   imageUrl: string;
@@ -25,26 +25,19 @@ function News() {
         id: doc.id,
         title: doc.data().title,
         content: doc.data().content,
-        date: new Date(doc.data().date.seconds * 1000).toLocaleDateString('fi-FI', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-        }),
+        date: new Date(doc.data().date.seconds * 1000),
         imageUrl: doc.data().imageUrl,
         views: doc.data().views,
       }));
 
-      newsList.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateB.getTime() - dateA.getTime();
-      });
+      newsList.sort((a, b) => b.date.getTime() - a.date.getTime());
 
       setData(newsList);
     };
 
     fetchNewsData();
   }, []);
+
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -85,7 +78,12 @@ function News() {
                 <Dialog
                   key={item.id}
                   heading={item.title}
-                  date={item.date}
+                  date={item.date.toLocaleDateString('fi-FI', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
                   isOpen={!!isOpen[item.id]}
                   onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
                   fullScreen={window.innerWidth <= 1265}
@@ -102,7 +100,12 @@ function News() {
                 </div>
                 <div className={'post-content-container'}>
                   <div className={'post-main-info'}>
-                    <div className={'post-date'}>{item.date}</div>
+                    <div className={'post-date'}>{item.date.toLocaleDateString('fi-FI', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}</div>
                     <div className={'post-header'}>{item.title}</div>
                     <div className={'post-preview'}
                          dangerouslySetInnerHTML={{__html: item.content.length > 240 ? item.content.substring(0, 240) + "..." : item.content}}/>
@@ -119,7 +122,12 @@ function News() {
                 <Dialog
                   key={item.id}
                   heading={item.title}
-                  date={item.date}
+                  date={item.date.toLocaleDateString('fi-FI', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
                   isOpen={!!isOpen[item.id]}
                   onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
                   fullScreen={window.innerWidth <= 1265}
@@ -133,7 +141,7 @@ function News() {
                 </Dialog>
                 <div className={'mini-post-card'}>
                   <img src={item.imageUrl} alt={item.title} onClick={() => toggleDialog(item.id)}/>
-                  <span className={'mini-post-date'}>{item.date}</span>
+                  <span className={'mini-post-date'}>{item.date.toLocaleDateString('fi-FI')}</span>
                   <div className={'mini-post-header'}>{item.title}</div>
                 </div>
               </div>

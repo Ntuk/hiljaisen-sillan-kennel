@@ -42,7 +42,7 @@ const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(function TextEdito
         apiKey={'0y32rjmb103dwot3dabu5jel3e31rklvv6s6en847pfxv0lr'}
         tinymceScriptSrc="https://cdn.tiny.cloud/1/0y32rjmb103dwot3dabu5jel3e31rklvv6s6en847pfxv0lr/tinymce/5/tinymce.min.js"
         onInit={(_, editor) => editorRef.current = editor}
-        initialValue="<p>Uusi Seat Cordoba TDI Diesel!</p>"
+        initialValue=""
         init={{
           height: 500,
           menubar: true,

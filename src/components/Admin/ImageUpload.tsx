@@ -4,7 +4,7 @@ import { useState } from "react";
 
 interface ImageUploadProps {
   onImageUpload: (images: ImageType[]) => void;
-  onBase64Upload: (base64Images: string[]) => void; // Add callback for base64 images
+  onBase64Upload: (base64Images: string[]) => void;
 }
 
 function ImageUpload({ onImageUpload, onBase64Upload }: ImageUploadProps) {
@@ -37,6 +37,7 @@ function ImageUpload({ onImageUpload, onBase64Upload }: ImageUploadProps) {
         <div className="upload__image-wrapper">
           <button
             type={'button'}
+            className={'painike'}
             style={isDragging ? {color: 'red'} : undefined}
             onClick={onImageUpload}
             {...dragProps}
@@ -44,12 +45,17 @@ function ImageUpload({ onImageUpload, onBase64Upload }: ImageUploadProps) {
             Valitse kuva
           </button>
           &nbsp;
+          {imageList.length === 0 && (
+            <div className="image-item">
+              <div className={'image-placeholder'} />
+            </div>
+          )}
           {imageList.map((image, index) => (
             <div key={index} className="image-item">
               <img src={image['data_url']} alt="" width="100"/>
               <div className="image-item__btn-wrapper">
-                <button onClick={() => onImageUpdate(index)}>Update</button>
-                <button onClick={() => onImageRemove(index)}>Remove</button>
+                <button className={'painike'} onClick={() => onImageUpdate(index)}>Vaihda</button>
+                <button className={'painike'} onClick={() => onImageRemove(index)}>Poista</button>
               </div>
             </div>
           ))}
