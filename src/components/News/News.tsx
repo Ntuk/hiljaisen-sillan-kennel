@@ -3,6 +3,7 @@ import Dialog from '../Dialog/Dialog.tsx';
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.ts';
+import Admin from "../Admin/Admin.tsx";
 
 interface NewsData {
   id: string;
@@ -11,11 +12,18 @@ interface NewsData {
   content: string;
   imageUrl: string;
   views: number;
+  editedDate?: Date;
 }
 
-function News() {
+interface Props {
+  user: any;
+}
+
+function News({ user }: Props) {
   const [isOpen, setIsOpen] = useState<{ [id: string]: boolean }>({});
   const [data, setData] = useState<NewsData[]>([]);
+  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  const [formData, setFormData] = useState<NewsData | null>(null);
 
   useEffect(() => {
     const fetchNewsData = async () => {
@@ -28,6 +36,7 @@ function News() {
         date: new Date(doc.data().date.seconds * 1000),
         imageUrl: doc.data().imageUrl,
         views: doc.data().views,
+        editedDate: new Date(doc.data().editedDate?.seconds * 1000),
       }));
 
       newsList.sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -67,17 +76,51 @@ function News() {
     }));
   };
 
+  const handleAdminClick = () => {
+    setIsAdminOpen(!isAdminOpen);
+    setIsOpen({});
+  };
+
+  const editPost = (id: string) => {
+    const postToEdit = data.find(post => post.id === id);
+    setIsAdminOpen(true);
+    setFormData(postToEdit ? { ...postToEdit } : null);
+  };
+
+  const deletePost = (id: string) => {
+    // Implement delete functionality here
+    console.log('Delete post with ID:', id);
+  };
+
   return (
     <section id={'uutiset'} data-scroll={'uutiset'} className={'news-container'}>
       <div className={'news-content'}>
-        <span className={'news-header'}>Ajankohtaista</span>
-        <div className={'posts-container'}>
+        <div className={'header-container'}>
+          <span className={'news-header'}>Ajankohtaista</span>
+          {user && !isAdminOpen && (
+            <button className={'painike'} onClick={handleAdminClick}>Kirjoita uusi uutinen</button>
+          )}
+          {user && isAdminOpen && (
+            <button className={'painike'} onClick={handleAdminClick}>Takaisin uutisiin</button>
+          )}
+        </div>
+        {isAdminOpen ? <Admin formData={formData} /> : <div className={'posts-container'}>
           <div className={'posts'}>
             {data.slice(0, 3).map(item => (
               <div key={item.id} className={'post-card'} onClick={() => toggleDialog(item.id)}>
                 <Dialog
                   key={item.id}
                   heading={item.title}
+                  id={item.id}
+                  user={user}
+                  editPost={() => editPost(item.id)}
+                  deletePost={() => deletePost(item.id)}
+                  editedDate={item.editedDate instanceof Date ? item.editedDate.toLocaleDateString('fi-FI', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  }) || '' : ''}
                   date={item.date.toLocaleDateString('fi-FI', {
                     weekday: 'long',
                     year: 'numeric',
@@ -99,6 +142,7 @@ function News() {
                   <img src={item.imageUrl} alt={item.title}/>
                 </div>
                 <div className={'post-content-container'}>
+                  {isAdminOpen && <Admin formData={formData} />}
                   <div className={'post-main-info'}>
                     <div className={'post-date'}>{item.date.toLocaleDateString('fi-FI', {
                       weekday: 'long',
@@ -122,6 +166,16 @@ function News() {
                 <Dialog
                   key={item.id}
                   heading={item.title}
+                  id={item.id}
+                  user={user}
+                  editPost={() => editPost(item.id)}
+                  deletePost={() => deletePost(item.id)}
+                  editedDate={item.editedDate instanceof Date ? item.editedDate.toLocaleDateString('fi-FI', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  }) || '' : ''}
                   date={item.date.toLocaleDateString('fi-FI', {
                     weekday: 'long',
                     year: 'numeric',
@@ -147,7 +201,7 @@ function News() {
               </div>
             ))}
           </div>
-        </div>
+        </div>}
       </div>
       <div className={'news-spacer'}/>
     </section>

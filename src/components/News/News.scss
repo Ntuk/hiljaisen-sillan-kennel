@@ -17,12 +17,33 @@
   flex-direction: column;
   width: 100%;
   padding: 0 5rem;
-  //margin-top: 5rem;
 
-  .news-header {
-    font-family: 'Gaby', sans-serif;
-    font-size: 4rem;
-    margin-bottom: 1rem;
+  .header-container {
+    display: flex;
+    align-items: center;
+
+    .news-header {
+      font-family: 'Gaby', sans-serif;
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .painike {
+      border: 2px solid black;
+      border-radius: 4px;
+      height: 2.25rem;
+      background: #f1eae2;
+      margin-left: 1rem;
+
+      &:hover {
+        background: black;
+        color: white;
+      }
+
+      &:active {
+        background: #daae7d;
+      }
+    }
   }
 
   .posts-container {
@@ -64,6 +85,7 @@
           display: flex;
           justify-content: space-between;
           flex-direction: column;
+          position: relative;
 
           .post-main-info {
             display: flex;

@@ -1,5 +1,5 @@
 import './Dialog.scss';
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { IoClose } from "react-icons/io5";
 
 interface DialogProps {
@@ -7,37 +7,54 @@ interface DialogProps {
   date: string;
   isOpen: boolean;
   onClose: () => void;
+  user?: any;
+  id: string;
+  editedDate?: string;
+  editPost?: (id: string) => void;
+  deletePost?: (id: string) => void;
   children?: React.ReactNode;
   fullScreen: boolean;
 }
 
-const Dialog: React.FC<DialogProps> = ({ heading, date, isOpen, onClose, children, fullScreen }) => {
+const Dialog: React.FC<DialogProps> = ({ heading, date, isOpen, onClose, user, id, editedDate, editPost, deletePost, children, fullScreen }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const handleBodyScroll = () => {
-      if (fullScreen && isOpen) {
-        document.body.classList.add('dialog-open');
-      } else {
-        document.body.classList.remove('dialog-open');
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dialogRef.current && !dialogRef.current.contains(event.target as Node)) {
+        onClose();
       }
     };
 
-    handleBodyScroll();
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
 
     return () => {
-      document.body.classList.remove('dialog-open');
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [fullScreen, isOpen]);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   return (
-    <div className={`dialog-overlay ${fullScreen ? 'full-screen-dialog' : ''}`} onClick={onClose}>
-      <div className={`dialog-content ${fullScreen ? 'full-screen' : ''}`} onClick={(e) => e.stopPropagation()}>
+    <div className={`dialog-overlay ${fullScreen ? 'full-screen-dialog' : ''}`}>
+      <div className={`dialog-content ${fullScreen ? 'full-screen' : ''}`} ref={dialogRef}
+           onClick={(e) => e.stopPropagation()}>
         <div className={'dialog-heading'}>
           {heading}
           <IoClose className={'close-icon'} onClick={onClose}/>
         </div>
-        <div className={'date-container'}>{date}</div>
+        <div className={'date-container'}>
+          {date}
+          {user && editPost && deletePost && (
+            <div className={'post-actions'}>
+              <button className={'painike'} onClick={() => editPost(id)}>Muokkaa</button>
+              <button className={'painike destructive'} onClick={() => deletePost(id)}>Poista</button>
+            </div>
+          )}
+        </div>
+        <span className={'edited-date'}>{editedDate !== 'Invalid Date' ? `(Muokattu ${editedDate})` : ''}</span>
         <div className={'text-container'}>
           {children}
         </div>
@@ -45,6 +62,5 @@ const Dialog: React.FC<DialogProps> = ({ heading, date, isOpen, onClose, childre
     </div>
   );
 }
-
 
 export default Dialog;

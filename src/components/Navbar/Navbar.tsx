@@ -3,9 +3,16 @@ import logo from '../../assets/favicon.png';
 import { LiaPawSolid } from 'react-icons/lia';
 import { useState, useEffect } from "react";
 import { Link as ScrollLink, Events, scrollSpy } from 'react-scroll';
+import { Link } from 'react-router-dom';
 import { MdEmail, MdLocalPhone } from "react-icons/md";
+import { IoLogInOutline, IoLogOutOutline } from "react-icons/io5";
 
-function Navbar() {
+interface NavbarProps {
+  user: any;
+  onLogout: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   const [activeItem, setActiveItem] = useState<string>('etusivu');
 
   const navItems = ['Etusivu', 'Uutiset', 'Meistä', 'Koirat', 'Galleria'];
@@ -52,8 +59,8 @@ function Navbar() {
         <div className={'logo-container'}>
           <img src={logo} alt="Logo"/>
         </div>
-        <div className={'header-text'}>
-          Hiljaisen sillan kennel
+        <div className={`header-text ${user ? 'admin' : ''}`}>
+          {user ? 'Admin' : 'Hiljaisen sillan kennel'}
         </div>
       </div>
       <div className={'header-middle'}>
@@ -88,6 +95,15 @@ function Navbar() {
         <span>
           <a href={'tel:+358505957437'}><MdLocalPhone className={'right-icon'} /> +358 505957437</a>
         </span>
+        {user ? (
+          <Link to="/" onClick={onLogout}>
+            <IoLogOutOutline className={'right-icon'} /> Kirjaudu ulos
+          </Link>
+        ) : (
+          <Link to="/auth">
+            <IoLogInOutline className={'right-icon'} /> Kirjaudu sisään
+          </Link>
+        )}
       </div>
     </header>
   );

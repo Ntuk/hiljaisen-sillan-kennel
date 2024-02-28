@@ -1,16 +1,16 @@
 .admin-container {
   min-height: 90vh;
   background: #D9B99B;
+  //background: url('../../assets/admin-bg.svg') no-repeat;
+  //background-position: top;
+  //background-size: cover;
   position: relative;
-  padding-bottom: 20rem;
 }
 
 .admin-content {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0 5rem;
-  padding-top: 5rem;
 
   .items-container {
     display: flex;
@@ -111,7 +111,8 @@
   margin-right: 0.5rem;
 
   &:hover {
-    background: #ece3d9;
+    background: black;
+    color: white;
   }
 
   &:active {

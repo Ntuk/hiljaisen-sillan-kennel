@@ -43,6 +43,11 @@
       padding-left: 1rem;
       user-select: none;
 
+      &.admin {
+        color: red;
+        font-size: 3rem;
+      }
+
       &:hover {
         cursor: pointer;
       }

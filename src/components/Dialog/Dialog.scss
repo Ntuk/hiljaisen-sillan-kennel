@@ -35,7 +35,7 @@
     display: flex;
     align-items: center;
     font-family: 'Gaby', sans-serif;
-    padding: 2rem 2rem;
+    padding: 2rem 2rem 1rem 2rem;
     font-weight: 600;
     font-size: 2rem;
 
@@ -45,7 +45,43 @@
   }
 
   .date-container {
+    display: flex;
+    align-items: center;
     padding: 0 2rem;
+
+    .post-actions {
+      margin-left: 1rem;
+
+      button {
+        &:not(:first-child) {
+          margin-left: 0.5rem;
+        }
+      }
+
+      .destructive {
+        border: 2px solid red;
+        color: red;
+        border-radius: 4px;
+        height: 2.25rem;
+        background: #f1eae2;
+        margin-right: 0.5rem;
+
+        &:hover {
+          background: red;
+          color: #fff;
+        }
+
+        &:active {
+          background: #daae7d;
+        }
+      }
+    }
+  }
+
+  .edited-date {
+    display: block;
+    font-size: 0.5rem;
+    margin-left: 2rem;
   }
 
   .text-container {

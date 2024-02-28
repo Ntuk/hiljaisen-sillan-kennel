@@ -1,8 +1,9 @@
 import { Editor } from "@tinymce/tinymce-react";
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 
 interface TextEditorProps {
   onSubmit: (content: string) => void;
+  value?: string;
 }
 
 export interface TextEditorRef {
@@ -13,18 +14,22 @@ interface EditorRef {
   getContent: () => string;
 }
 
-const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(function TextEditorComponent({ onSubmit }, _) {
+const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(function TextEditorComponent({ onSubmit, value }, _) {
+  const [editorContent, setEditorContent] = useState<string>("");
   const editorRef = useRef<EditorRef | null>(null);
   const divRef = useRef<HTMLDivElement>(null);
-
-  const getText = () => {
-    return editorRef.current?.getContent() || "";
-  };
 
   useEffect(() => {
     getText();
   }, []);
 
+  useEffect(() => {
+    setEditorContent(value);
+  }, [value]);
+
+  const getText = () => {
+    return editorRef.current?.getContent() || "";
+  };
 
   const handleDivRef = (element: HTMLDivElement) => {
     if (element) {
@@ -33,6 +38,7 @@ const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(function TextEdito
   };
 
   const handleEditorChange = (content: string) => {
+    setEditorContent(content);
     onSubmit(content);
   };
 
@@ -42,7 +48,7 @@ const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(function TextEdito
         apiKey={'0y32rjmb103dwot3dabu5jel3e31rklvv6s6en847pfxv0lr'}
         tinymceScriptSrc="https://cdn.tiny.cloud/1/0y32rjmb103dwot3dabu5jel3e31rklvv6s6en847pfxv0lr/tinymce/5/tinymce.min.js"
         onInit={(_, editor) => editorRef.current = editor}
-        initialValue=""
+        initialValue={editorContent}
         init={{
           height: 500,
           menubar: true,

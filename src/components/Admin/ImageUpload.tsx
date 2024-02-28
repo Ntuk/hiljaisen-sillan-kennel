@@ -5,9 +5,10 @@ import { useState } from "react";
 interface ImageUploadProps {
   onImageUpload: (images: ImageType[]) => void;
   onBase64Upload: (base64Images: string[]) => void;
+  previewImage?: string;
 }
 
-function ImageUpload({ onImageUpload, onBase64Upload }: ImageUploadProps) {
+function ImageUpload({ onImageUpload, onBase64Upload, previewImage }: ImageUploadProps) {
   const [images, setImages] = useState<ImageType[]>([]);
   const maxNumber = 69;
 
@@ -45,7 +46,12 @@ function ImageUpload({ onImageUpload, onBase64Upload }: ImageUploadProps) {
             Valitse kuva
           </button>
           &nbsp;
-          {imageList.length === 0 && (
+          {previewImage && (
+            <div className="image-item">
+              <img src={previewImage} alt="" width="100"/>
+            </div>
+          )}
+          {!previewImage && imageList.length === 0 && (
             <div className="image-item">
               <div className={'image-placeholder'} />
             </div>
