@@ -1,7 +1,7 @@
 import './News.scss';
 import Dialog from '../Dialog/Dialog.tsx';
 import { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.ts';
 import Admin from "../Admin/Admin.tsx";
 
@@ -24,6 +24,8 @@ function News({ user }: Props) {
   const [data, setData] = useState<NewsData[]>([]);
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<NewsData | null>(null);
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState<boolean>(false);
+  const [deletePostId, setDeletePostId] = useState<string>('');
 
   useEffect(() => {
     const fetchNewsData = async () => {
@@ -69,7 +71,17 @@ function News({ user }: Props) {
     };
   }, [isOpen]);
 
-  const toggleDialog = (id: string) => {
+  const toggleDialog = async (id: string) => {
+    const updatedData = data.map(item => {
+      if (item.id === id) {
+        const updatedViews = item.views + 1;
+        updateDoc(doc(db, 'news', id), { views: updatedViews });
+        return { ...item, views: updatedViews };
+      }
+      return item;
+    });
+    setData(updatedData);
+
     setIsOpen(prevState => ({
       ...prevState,
       [id]: !prevState[id] || false,
@@ -79,6 +91,7 @@ function News({ user }: Props) {
   const handleAdminClick = () => {
     setIsAdminOpen(!isAdminOpen);
     setIsOpen({});
+    setFormData(null);
   };
 
   const editPost = (id: string) => {
@@ -87,9 +100,27 @@ function News({ user }: Props) {
     setFormData(postToEdit ? { ...postToEdit } : null);
   };
 
-  const deletePost = (id: string) => {
-    // Implement delete functionality here
-    console.log('Delete post with ID:', id);
+  const openDeleteConfirmation = (id: string) => {
+    setDeletePostId(id);
+    setDeleteConfirmationOpen(true);
+  };
+
+  const closeDeleteConfirmation = () => {
+    setDeleteConfirmationOpen(false);
+    setDeletePostId('');
+  };
+
+  const confirmDeletePost = async () => {
+    try {
+      await deleteDoc(doc(db, 'news', deletePostId));
+      console.log('Post successfully deleted.');
+      // Refresh the data after deletion
+      const updatedData = data.filter(item => item.id !== deletePostId);
+      setData(updatedData);
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+    closeDeleteConfirmation();
   };
 
   return (
@@ -114,7 +145,7 @@ function News({ user }: Props) {
                   id={item.id}
                   user={user}
                   editPost={() => editPost(item.id)}
-                  deletePost={() => deletePost(item.id)}
+                  deletePost={() => openDeleteConfirmation(item.id)}
                   editedDate={item.editedDate instanceof Date ? item.editedDate.toLocaleDateString('fi-FI', {
                     weekday: 'long',
                     year: 'numeric',
@@ -169,7 +200,7 @@ function News({ user }: Props) {
                   id={item.id}
                   user={user}
                   editPost={() => editPost(item.id)}
-                  deletePost={() => deletePost(item.id)}
+                  deletePost={() => openDeleteConfirmation(item.id)}
                   editedDate={item.editedDate instanceof Date ? item.editedDate.toLocaleDateString('fi-FI', {
                     weekday: 'long',
                     year: 'numeric',
@@ -204,6 +235,17 @@ function News({ user }: Props) {
         </div>}
       </div>
       <div className={'news-spacer'}/>
+      <Dialog
+        heading="Haluatko varmasti poistaa tämän postauksen?"
+        confirmationDialog={true}
+        isOpen={deleteConfirmationOpen}
+        onClose={closeDeleteConfirmation}
+      >
+        <div className="delete-confirmation-dialog">
+          <button className={'painike'} onClick={confirmDeletePost}>Kyllä</button>
+          <button className={'painike'} onClick={closeDeleteConfirmation}>Peruuta</button>
+        </div>
+      </Dialog>
     </section>
   );
 }

@@ -34,10 +34,14 @@
   .dialog-heading {
     display: flex;
     align-items: center;
-    font-family: 'Gaby', sans-serif;
     padding: 2rem 2rem 1rem 2rem;
     font-weight: 600;
     font-size: 2rem;
+
+    &.centered {
+      display: flex;
+      justify-content: center;
+    }
 
     span {
       font-size: 1rem;
@@ -86,6 +90,11 @@
 
   .text-container {
     padding: 2rem;
+
+    &.centered {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   .close-icon {
