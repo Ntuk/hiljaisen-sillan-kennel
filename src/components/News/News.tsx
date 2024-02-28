@@ -97,6 +97,7 @@ function News({ user }: Props) {
 
   const editPost = (id: string) => {
     const postToEdit = data.find(post => post.id === id);
+    console.log('post.views', postToEdit.views);
     setIsAdminOpen(true);
     setFormData(postToEdit ? { ...postToEdit } : null);
   };
