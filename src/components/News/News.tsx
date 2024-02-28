@@ -186,7 +186,7 @@ function News({ user }: Props) {
                     <div className={'post-preview'}
                          dangerouslySetInnerHTML={{__html: item.content.length > 240 ? item.content.substring(0, 240) + "..." : item.content}}/>
                   </div>
-                  <div className={'post-meta'}><FaRegEye /> {item.views} katselukertaa</div>
+                  <div className={'post-meta'}><FaRegEye /> {item.views} lukukertaa</div>
                 </div>
               </div>
             ))}

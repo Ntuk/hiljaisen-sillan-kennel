@@ -34,3 +34,9 @@
     font-size: 4rem;
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .hero-text {
+    font-size: 2rem;
+  }
+}

@@ -9,12 +9,25 @@
   display: flex;
   position: fixed;
   align-items: center;
+  justify-content: space-between;
   height: 5rem;
-  width: 100%;
+  width: 100vw;
   z-index: 9;
   box-shadow: 0 1px 3px 1px rgba(24, 60, 52, 0.16);
   background: url('../../assets/navbar-curve.svg') no-repeat;
   background-size: cover;
+
+  &.center-content {
+    display: flex;
+    align-items: center;
+
+    .header-left {
+      .logo-container {
+        padding-left: 0;
+        display: none;
+      }
+    }
+  }
 
   .header-left {
     display: inline-flex;
@@ -112,6 +125,17 @@
   .header-right {
     margin-right: 1rem;
 
+    .hamburger-menu {
+      position: absolute;
+      right: 2rem;
+      top: 1rem;
+      font-size: 2rem;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
     span, a {
       display: flex;
       align-items: center;
@@ -131,3 +155,4 @@
     }
   }
 }
+

@@ -6,6 +6,7 @@ import { Link as ScrollLink, Events, scrollSpy } from 'react-scroll';
 import { Link } from 'react-router-dom';
 import { MdEmail, MdLocalPhone } from "react-icons/md";
 import { IoLogInOutline, IoLogOutOutline } from "react-icons/io5";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 interface NavbarProps {
   user: any;
@@ -14,8 +15,21 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   const [activeItem, setActiveItem] = useState<string>('etusivu');
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const navItems = ['Etusivu', 'Uutiset', 'Meistä', 'Koirat', 'Galleria'];
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   };
 
   return (
-    <header>
+    <header className={windowWidth < 1100 ? ' center-content' : ''}>
       <div className={'header-left'}>
         <div className={'logo-container'}>
           <img src={logo} alt="Logo"/>
@@ -63,46 +77,57 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           {user ? 'Admin' : 'Hiljaisen sillan kennel'}
         </div>
       </div>
-      <div className={'header-middle'}>
-        {navItems.map((item: string, index: number) => (
-          <div
-            key={index}
-            className={`nav-item ${activeItem === item.toLowerCase() ? 'active' : ''}`}
-            tabIndex={0}>
-            {(activeItem === item.toLowerCase()) ? (
-              <LiaPawSolid
-                className={'icon'}
-                style={{color: '#c0967d', transform: `rotate(30deg)`}}
-              />
-            ) : null}
-            <ScrollLink
-              to={item.toLowerCase()}
-              smooth={false}
-              duration={100}
-              spy={true}
-              activeClass="active"
-              offset={-200}
-            >
-              {item}
-            </ScrollLink>
-          </div>
-        ))}
-      </div>
+      {windowWidth > 1100 && (
+        <div className={'header-middle'}>
+          {navItems.map((item: string, index: number) => (
+            <div
+              key={index}
+              className={`nav-item ${activeItem === item.toLowerCase() ? 'active' : ''}`}
+              tabIndex={0}>
+              {(activeItem === item.toLowerCase()) ? (
+                <LiaPawSolid
+                  className={'icon'}
+                  style={{color: '#c0967d', transform: `rotate(30deg)`}}
+                />
+              ) : null}
+              <ScrollLink
+                to={item.toLowerCase()}
+                smooth={false}
+                duration={100}
+                spy={true}
+                activeClass="active"
+                offset={-200}
+              >
+                {item}
+              </ScrollLink>
+            </div>
+          ))}
+        </div>
+      )}
       <div className={'header-right'}>
-        <span>
-          <a href={'mailto:hiljaisensillan@gmail.com'}><MdEmail className={'right-icon'} /> hiljaisensillan@gmail.com</a>
-        </span>
-        <span>
-          <a href={'tel:+358505957437'}><MdLocalPhone className={'right-icon'} /> +358 505957437</a>
-        </span>
-        {user ? (
-          <Link to="/" onClick={onLogout}>
-            <IoLogOutOutline className={'right-icon'} /> Kirjaudu ulos
-          </Link>
+        {windowWidth <= 1100 ? (
+          <div className={'hamburger-menu'}>
+            <GiHamburgerMenu />
+          </div>
         ) : (
-          <Link to="/auth">
-            <IoLogInOutline className={'right-icon'} /> Kirjaudu sisään
-          </Link>
+          <>
+          <span>
+            <a href={'mailto:hiljaisensillan@gmail.com'}><MdEmail
+              className={'right-icon'}/> hiljaisensillan@gmail.com</a>
+          </span>
+            <span>
+            <a href={'tel:+358505957437'}><MdLocalPhone className={'right-icon'}/> +358 505957437</a>
+          </span>
+            {user ? (
+              <Link to="/" onClick={onLogout}>
+                <IoLogOutOutline className={'right-icon'}/> Kirjaudu ulos
+              </Link>
+            ) : (
+              <Link to="/auth">
+                <IoLogInOutline className={'right-icon'}/> Kirjaudu sisään
+              </Link>
+            )}
+          </>
         )}
       </div>
     </header>
