@@ -16,12 +16,16 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   const [activeItem, setActiveItem] = useState<string>('etusivu');
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const navItems = ['Etusivu', 'Uutiset', 'Meistä', 'Koirat', 'Galleria'];
 
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
+      if (window.innerWidth > 1100) {
+        setShowDropdown(false);
+      }
     };
 
     window.addEventListener('resize', handleResize);
@@ -67,8 +71,12 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
     setActiveItem(currentActiveItem);
   };
 
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   return (
-    <header className={windowWidth < 1100 ? ' center-content' : ''}>
+    <header className={windowWidth < 1100 ? 'center-content' : ''}>
       <div className={'header-left'}>
         <div className={'logo-container'}>
           <img src={logo} alt="Logo"/>
@@ -106,18 +114,18 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
       )}
       <div className={'header-right'}>
         {windowWidth <= 1100 ? (
-          <div className={'hamburger-menu'}>
+          <div className={'hamburger-menu'} onClick={toggleDropdown}>
             <GiHamburgerMenu />
           </div>
         ) : (
           <>
-          <span>
-            <a href={'mailto:hiljaisensillan@gmail.com'}><MdEmail
-              className={'right-icon'}/> hiljaisensillan@gmail.com</a>
-          </span>
             <span>
-            <a href={'tel:+358505957437'}><MdLocalPhone className={'right-icon'}/> +358 505957437</a>
-          </span>
+              <a href={'mailto:hiljaisensillan@gmail.com'}><MdEmail
+                className={'right-icon'}/> hiljaisensillan@gmail.com</a>
+            </span>
+            <span>
+              <a href={'tel:+358505957437'}><MdLocalPhone className={'right-icon'}/> +358 505957437</a>
+            </span>
             {user ? (
               <Link to="/" onClick={onLogout}>
                 <IoLogOutOutline className={'right-icon'}/> Kirjaudu ulos
@@ -130,6 +138,28 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           </>
         )}
       </div>
+        <div className={`burger-menu ${showDropdown ? '' : 'hidden'}`}>
+          {navItems.map((item: string, index: number) => (
+            <div className={'burger-item'} key={index}>
+              <ScrollLink
+                to={item.toLowerCase()}
+                smooth={false}
+                duration={100}
+                spy={true}
+                activeClass="active"
+                offset={-200}
+              >
+                {item}
+              </ScrollLink>
+              {(activeItem === item.toLowerCase()) ? (
+                <LiaPawSolid
+                  className={'icon'}
+                  style={{color: '#c0967d', transform: `rotate(30deg)`}}
+                />
+              ) : null}
+            </div>
+          ))}
+        </div>
     </header>
   );
 }

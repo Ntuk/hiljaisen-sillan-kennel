@@ -5,29 +5,16 @@
   font-style: normal;
 }
 
-header {
+  header {
   display: flex;
   position: fixed;
   align-items: center;
-  justify-content: space-between;
   height: 5rem;
-  width: 100vw;
+  width: 100%;
   z-index: 9;
   box-shadow: 0 1px 3px 1px rgba(24, 60, 52, 0.16);
   background: url('../../assets/navbar-curve.svg') no-repeat;
   background-size: cover;
-
-  &.center-content {
-    display: flex;
-    align-items: center;
-
-    .header-left {
-      .logo-container {
-        padding-left: 0;
-        display: none;
-      }
-    }
-  }
 
   .header-left {
     display: inline-flex;
@@ -55,11 +42,6 @@ header {
       align-items: center;
       padding-left: 1rem;
       user-select: none;
-
-      &.admin {
-        color: red;
-        font-size: 3rem;
-      }
 
       &:hover {
         cursor: pointer;
@@ -111,6 +93,11 @@ header {
         background: rgba(243, 223, 215, 0.3);
       }
 
+      //&:focus {
+      //  cursor: pointer;
+      //  background: rgba(243, 223, 215, 0.4);
+      //}
+
       &:active {
         background: rgba(243, 223, 215, 0.5);
       }
@@ -120,19 +107,7 @@ header {
   .header-right {
     margin-right: 1rem;
 
-    .hamburger-menu {
-      position: absolute;
-      right: 2rem;
-      top: 1rem;
-      font-size: 2rem;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-
-    span,
-    a {
+    span, a {
       display: flex;
       align-items: center;
       flex-wrap: nowrap;
@@ -147,55 +122,6 @@ header {
 
       .right-icon {
         margin-right: 0.25rem;
-      }
-    }
-  }
-
-  .burger-menu {
-    position: absolute;
-    top: 5rem;
-    left: 0;
-    width: 100%;
-    border-bottom: 1px solid #ccc;
-    transition: transform 0.3s ease-in-out;
-    box-shadow: 0 1px 3px 1px rgba(24, 60, 52, 0.16);
-    background: url('../../assets/navbar-curve.svg') no-repeat;
-    background-size: cover;
-
-    &.hidden {
-      transform: translateX(100%);
-    }
-
-    .burger-item {
-      display: flex;
-      align-items: center;
-      height: 5rem;
-      font-size: 1.6rem;
-      color: #112a25;
-      transition: background-color 0.3s ease;
-
-      .icon {
-        font-size: 3rem;
-        overflow: hidden;
-        pointer-events: none;
-      }
-
-      a {
-        display: flex;
-        align-items: center;
-        padding: 0 2rem;
-        color: #000;
-        width: 100%;
-        height: 100%;
-      }
-
-      &:hover {
-        background-color: #f3dfd7;
-        cursor: pointer;
-      }
-
-      .icon {
-        margin-right: 1rem;
       }
     }
   }
