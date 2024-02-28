@@ -65,12 +65,11 @@
     flex-direction: column;
     padding: 0 2rem;
 
-    .about-image {
 
+    .about-header-text-container {
+      .about-text {
+        margin-right: 0;
+      }
     }
-  }
-
-  .about-header {
-    font-size: 2.5rem;
   }
 }
