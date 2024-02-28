@@ -48,9 +48,10 @@ const TextEditor = forwardRef<TextEditorRef, TextEditorProps>(function TextEdito
         apiKey={'0y32rjmb103dwot3dabu5jel3e31rklvv6s6en847pfxv0lr'}
         tinymceScriptSrc="https://cdn.tiny.cloud/1/0y32rjmb103dwot3dabu5jel3e31rklvv6s6en847pfxv0lr/tinymce/5/tinymce.min.js"
         onInit={(_, editor) => editorRef.current = editor}
-        initialValue={editorContent}
+        value={editorContent}
         init={{
           height: 500,
+          directionality: 'ltr',
           menubar: true,
           plugins: [
             'advlist autolink lists link image charmap print preview anchor',

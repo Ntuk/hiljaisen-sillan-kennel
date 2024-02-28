@@ -1,10 +1,11 @@
 import './News.scss';
 import Dialog from '../Dialog/Dialog.tsx';
 import { useEffect, useState } from 'react';
-import { collection, getDocs, deleteDoc, updateDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.ts';
 import Admin from "../Admin/Admin.tsx";
 import { FaRegEye } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface NewsData {
   id: string;
@@ -21,6 +22,8 @@ interface Props {
 }
 
 function News({ user }: Props) {
+  const { slug } = useParams();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState<{ [id: string]: boolean }>({});
   const [data, setData] = useState<NewsData[]>([]);
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
@@ -50,6 +53,37 @@ function News({ user }: Props) {
     fetchNewsData();
   }, []);
 
+  useEffect(() => {
+    const fetchAndOpenPost = async () => {
+      try {
+        const docRef = doc(db, 'news', slug);
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+          // Open dialog with post data
+          const postData = {
+            id: docSnapshot.id,
+            title: docSnapshot.data().title,
+            content: docSnapshot.data().content,
+            date: new Date(docSnapshot.data().date.seconds * 1000),
+            imageUrl: docSnapshot.data().imageUrl,
+            views: docSnapshot.data().views,
+            editedDate: new Date(docSnapshot.data().editedDate?.seconds * 1000),
+          };
+          setIsOpen({ [postData.id]: true });
+          setData([postData]); // Set data to display only the single post
+        } else {
+          // Handle post not found
+          navigate('/'); // Redirect to home or another page
+        }
+      } catch (error) {
+        console.error('Error fetching post:', error);
+      }
+    };
+
+    if (slug) {
+      fetchAndOpenPost();
+    }
+  }, [slug, navigate]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -95,11 +129,11 @@ function News({ user }: Props) {
     setFormData(null);
   };
 
-  const editPost = (id: string) => {
+  const editPost = async (id: string) => {
     const postToEdit = data.find(post => post.id === id);
     console.log('post.views', postToEdit.views);
     setIsAdminOpen(true);
-    setFormData(postToEdit ? { ...postToEdit } : null);
+    setFormData(postToEdit ? {...postToEdit} : null);
   };
 
   const openDeleteConfirmation = (id: string) => {
@@ -137,7 +171,7 @@ function News({ user }: Props) {
             <button className={'painike'} onClick={handleAdminClick}>Takaisin uutisiin</button>
           )}
         </div>
-        {isAdminOpen ? <Admin formData={formData} /> : <div className={'posts-container'}>
+        {isAdminOpen ? <Admin formData={formData} setIsAdminOpen={setIsAdminOpen} /> : <div className={'posts-container'}>
           <div className={'posts'}>
             {data.slice(0, 3).map(item => (
               <div key={item.id} className={'post-card'} onClick={() => toggleDialog(item.id)}>

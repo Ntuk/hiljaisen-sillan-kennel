@@ -2,8 +2,10 @@ import './Admin.scss';
 import TextEditor, { TextEditorRef } from "./TextEditor.tsx";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import ImageUpload from "./ImageUpload.tsx";
-import { collection, addDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from "../../firebase/firebase.ts";
+import { Bounce, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 interface NewsFormData {
   id?: string;
@@ -17,14 +19,35 @@ interface NewsFormData {
 
 interface AdminProps {
   formData?: NewsFormData;
+  setIsAdminOpen?: (value: boolean) => void;
 }
 
-function Admin({ formData }: AdminProps) {
+function Admin({ formData, setIsAdminOpen }: AdminProps) {
   const [imageUrl, setImageUrl] = useState<string>('');
   const [textEditorValue, setTextEditorValue] = useState<string>('');
 
   const titleRef = useRef<HTMLInputElement>(null);
   const textEditorRef = useRef<TextEditorRef>(null);
+  const notifySuccess = (message) => toast(message, {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    type: "success",
+    theme: "light",
+    transition: Bounce,
+  });
+  const notifyError = (message) => toast(message, {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    type: "error",
+    theme: "light",
+    transition: Bounce,
+  });
 
   useEffect(() => {
     if (formData) {
@@ -61,7 +84,7 @@ function Admin({ formData }: AdminProps) {
         title: title,
         content: content,
         imageUrl: image,
-        views: 0
+        views: formData ? formData.views : 0
       };
 
       console.log("Form data submitted:", newData);
@@ -77,14 +100,25 @@ function Admin({ formData }: AdminProps) {
               views: newData.views,
               editedDate: new Date()
             };
+
+            const docSnapshot = await getDoc(doc(db, 'news', formData.id));
+            if (docSnapshot.exists()) {
+              newDataForUpdate.views = docSnapshot.data().views;
+            }
+
             await updateDoc(doc(db, 'news', formData.id), newDataForUpdate);
             console.log('Document updated with ID: ', formData.id);
+            notifySuccess('Uutinen päivitetty onnistuneesti');
+            setIsAdminOpen(false);
           } else {
             const docRef = await addDoc(collection(db, 'news'), newData);
             console.log('Document written with ID: ', docRef.id);
+            notifySuccess('Uutinen lisätty onnistuneesti');
+            setIsAdminOpen(false);
           }
         } catch (e) {
           console.error('Error adding document: ', e);
+          notifyError('Jotain meni perseelleen');
         }
       };
 

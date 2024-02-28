@@ -10,6 +10,7 @@ import Gallery from './components/Gallery/Gallery.tsx';
 import Navbar from './components/Navbar/Navbar.tsx';
 import Sidebar from './components/Sidebar/Sidebar.tsx';
 import AuthPage from './components/Auth/Auth.tsx';
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -51,6 +52,7 @@ function App() {
             </>
           } />
         </Routes>
+        <ToastContainer />
       </>
     </Router>
   );
