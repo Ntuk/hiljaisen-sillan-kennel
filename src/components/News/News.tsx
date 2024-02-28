@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.ts';
 import Admin from "../Admin/Admin.tsx";
+import { FaRegEye } from "react-icons/fa";
 
 interface NewsData {
   id: string;
@@ -185,7 +186,7 @@ function News({ user }: Props) {
                     <div className={'post-preview'}
                          dangerouslySetInnerHTML={{__html: item.content.length > 240 ? item.content.substring(0, 240) + "..." : item.content}}/>
                   </div>
-                  <div className={'post-meta'}>{item.views} katselukertaa</div>
+                  <div className={'post-meta'}><FaRegEye /> {item.views} katselukertaa</div>
                 </div>
               </div>
             ))}
@@ -225,6 +226,7 @@ function News({ user }: Props) {
                   </div>
                 </Dialog>
                 <div className={'mini-post-card'}>
+                  <div className={'mini-post-meta'}><FaRegEye /> {item.views}</div>
                   <img src={item.imageUrl} alt={item.title} onClick={() => toggleDialog(item.id)}/>
                   <span className={'mini-post-date'}>{item.date.toLocaleDateString('fi-FI')}</span>
                   <div className={'mini-post-header'}>{item.title}</div>
