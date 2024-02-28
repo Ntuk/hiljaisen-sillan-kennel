@@ -1,5 +1,5 @@
 import './About.scss';
-import avatarImage from '../../assets/avatar.jpeg';
+import avatarImage from '../../assets/minna_ja_doggot.jpg';
 
 function About() {
   return (
