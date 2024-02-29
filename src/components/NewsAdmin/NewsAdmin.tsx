@@ -1,4 +1,4 @@
-import './Admin.scss';
+import './NewsAdmin.scss';
 import TextEditor, { TextEditorRef } from "./TextEditor.tsx";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import ImageUpload from "./ImageUpload.tsx";
@@ -17,12 +17,13 @@ interface NewsFormData {
   views: number;
 }
 
-interface AdminProps {
+interface NewsAdminProps {
   formData?: NewsFormData;
   setIsAdminOpen?: (value: boolean) => void;
+  onFormSubmit: any;
 }
 
-function Admin({ formData, setIsAdminOpen }: AdminProps) {
+function NewsAdmin({ formData, setIsAdminOpen, onFormSubmit }: NewsAdminProps) {
   const [imageUrl, setImageUrl] = useState<string>('');
   const [textEditorValue, setTextEditorValue] = useState<string>('');
 
@@ -110,11 +111,13 @@ function Admin({ formData, setIsAdminOpen }: AdminProps) {
             console.log('Document updated with ID: ', formData.id);
             notifySuccess('Uutinen päivitetty onnistuneesti');
             setIsAdminOpen(false);
+            onFormSubmit();
           } else {
             const docRef = await addDoc(collection(db, 'news'), newData);
             console.log('Document written with ID: ', docRef.id);
             notifySuccess('Uutinen lisätty onnistuneesti');
             setIsAdminOpen(false);
+            onFormSubmit();
           }
         } catch (e) {
           console.error('Error adding document: ', e);
@@ -127,8 +130,8 @@ function Admin({ formData, setIsAdminOpen }: AdminProps) {
   };
 
   return (
-    <section id={'admin'} data-scroll={'admin'} className={'admin-container'}>
-      <div className={'admin-content'}>
+    <section id={'admin'} data-scroll={'admin'} className={'news-admin-container'}>
+      <div className={'news-admin-content'}>
         <form onSubmit={handleSubmit}>
           <div className={'items-container'}>
             <div className={'text-items'}>
@@ -154,4 +157,4 @@ function Admin({ formData, setIsAdminOpen }: AdminProps) {
   );
 }
 
-export default Admin;
+export default NewsAdmin;

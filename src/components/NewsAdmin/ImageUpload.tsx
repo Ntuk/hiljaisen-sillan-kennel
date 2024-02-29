@@ -1,6 +1,6 @@
 import ImageUploading from 'react-images-uploading';
 import { ImageType } from "react-images-uploading/dist/typings";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ImageUploadProps {
   onImageUpload: (images: ImageType[]) => void;
@@ -18,6 +18,10 @@ function ImageUpload({ onImageUpload, onBase64Upload, previewImage }: ImageUploa
     onImageUpload(imageList);
     onBase64Upload(base64Images);
   };
+
+  useEffect(() => {
+    previewImage = '';
+  }, [images]);
 
   return (
     <ImageUploading
@@ -46,25 +50,29 @@ function ImageUpload({ onImageUpload, onBase64Upload, previewImage }: ImageUploa
             Valitse kuva
           </button>
           &nbsp;
-          {previewImage && (
-            <div className="image-item">
-              <img src={previewImage} alt="" width="100"/>
-            </div>
-          )}
           {!previewImage && imageList.length === 0 && (
             <div className="image-item">
               <div className={'image-placeholder'} />
             </div>
           )}
-          {imageList.map((image, index) => (
-            <div key={index} className="image-item">
-              <img src={image['data_url']} alt="" width="100"/>
-              <div className="image-item__btn-wrapper">
-                <button className={'painike'} onClick={() => onImageUpdate(index)}>Vaihda</button>
-                <button className={'painike'} onClick={() => onImageRemove(index)}>Poista</button>
+
+          {imageList.length > 0 && (
+            imageList.map((image: ImageType, index: number) => (
+              <div key={index} className="image-item">
+                <img src={image['data_url']} alt="" width="100"/>
+                <div className="image-item__btn-wrapper">
+                  <button type={'button'} className={'painike'} onClick={() => onImageUpdate(index)}>Vaihda</button>
+                  <button type={'button'} className={'painike'} onClick={() => onImageRemove(index)}>Poista</button>
+                </div>
               </div>
+            ))
+          )}
+
+          {previewImage && imageList.length === 0 && (
+            <div className="image-item">
+              <img src={previewImage} alt="" width="100"/>
             </div>
-          ))}
+          )}
         </div>
       )}
     </ImageUploading>

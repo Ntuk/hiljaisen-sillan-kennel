@@ -1,12 +1,13 @@
 import './About.scss';
-import avatarImage from '../../assets/minna_ja_doggot.jpg';
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebase.ts";
+import AboutAdmin from "../AboutAdmin/AboutAdmin.tsx";
 
 export interface AboutData {
   id: string;
   content: string;
+  imageUrl: string;
 }
 
 interface Props {
@@ -16,25 +17,48 @@ interface Props {
 function About({ user }: Props) {
   const [data, setData] = useState<AboutData[]>([]);
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  const [formData, setFormData] = useState<AboutData | null>(null);
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchNewsData = async () => {
+    const fetchAboutData = async () => {
       const aboutCollection = collection(db, 'about');
       const aboutSnapshot = await getDocs(aboutCollection);
       const aboutList: AboutData[] = aboutSnapshot.docs.map(doc => ({
         id: doc.id,
         content: doc.data().content,
+        imageUrl: doc.data().imageUrl
       }));
 
       setData(aboutList);
     };
 
-    fetchNewsData();
+    fetchAboutData();
   }, []);
 
-  const handleAdminClick = () => {
-    setIsAdminOpen(!isAdminOpen);
-    console.log('Open admin view..', isAdminOpen);
+  useEffect(() => {
+    const fetchAboutData = async () => {
+      const aboutCollection = collection(db, 'about');
+      const aboutSnapshot = await getDocs(aboutCollection);
+      const aboutList: AboutData[] = aboutSnapshot.docs.map(doc => ({
+        id: doc.id,
+        content: doc.data().content,
+        imageUrl: doc.data().imageUrl
+      }));
+
+      setData(aboutList);
+    };
+
+    if (formSubmitted) {
+      fetchAboutData();
+      setFormSubmitted(false);
+    }
+  }, [formSubmitted]);
+
+  const editAbout = async () => {
+    const aboutData = data.find(aboutData => aboutData.content);
+    setIsAdminOpen(true);
+    setFormData(aboutData ? {...aboutData} : null);
   };
 
   return (
@@ -44,17 +68,21 @@ function About({ user }: Props) {
           <div className={'about-header-container'}>
             <span className={'about-header'}>Meistä</span>
             {user && !isAdminOpen && (
-              <button className={'painike'} onClick={handleAdminClick}>Muokkaa</button>
+              <button className={'painike'} onClick={editAbout}>Muokkaa</button>
             )}
           </div>
-          <div className={'about-text'}>
-            <div className={'image'}>
-              <img src={avatarImage}/>
+          {isAdminOpen ? <AboutAdmin formData={formData} setIsAdminOpen={setIsAdminOpen} onFormSubmit={() => setFormSubmitted(true)} /> :
+            <div className={'about-text'}>
+              {data.map(item => (
+                <>
+                  <div className={'image'} key={item.id}>
+                    <img src={item.imageUrl} alt={'Kuva'} />
+                  </div>
+                  <span dangerouslySetInnerHTML={{__html: item.content }}>
+                  </span></>
+                ))}
             </div>
-            {data.map(item => (
-              item.content
-            ))}
-          </div>
+          }
         </div>
       </div>
       <div className={'about-spacer'}/>

@@ -56,6 +56,10 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
     };
   }, []);
 
+  useEffect(() => {
+    setShowDropdown(false);
+  }, [onLogout]);
+
   const updateActiveItem = () => {
     const scrollSections = document.querySelectorAll('[data-scroll]');
     let currentActiveItem = '';
@@ -77,14 +81,16 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
 
   return (
     <header className={windowWidth < 1100 ? 'center-content' : ''}>
-      <div className={'header-left'}>
-        <div className={'logo-container'}>
-          <img src={logo} alt="Logo"/>
+      <Link to="/">
+        <div className={'header-left'}>
+          <div className={'logo-container'}>
+            <img src={logo} alt="Logo"/>
+          </div>
+          <div className={`header-text ${user ? 'admin' : ''}`}>
+            {user ? 'Admin' : 'Hiljaisen sillan kennel'}
+          </div>
         </div>
-        <div className={`header-text ${user ? 'admin' : ''}`}>
-          {user ? 'Admin' : 'Hiljaisen sillan kennel'}
-        </div>
-      </div>
+      </Link>
       {windowWidth > 1100 && (
         <div className={'header-middle'}>
           {navItems.map((item: string, index: number) => (
@@ -138,28 +144,39 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           </>
         )}
       </div>
-        <div className={`burger-menu ${showDropdown ? '' : 'hidden'}`}>
-          {navItems.map((item: string, index: number) => (
-            <div className={'burger-item'} key={index}>
-              <ScrollLink
-                to={item.toLowerCase()}
-                smooth={false}
-                duration={100}
-                spy={true}
-                activeClass="active"
-                offset={-100}
-              >
-                {item}
-              </ScrollLink>
-              {(activeItem === item.toLowerCase()) ? (
-                <LiaPawSolid
-                  className={'icon'}
-                  style={{color: '#c0967d', transform: `rotate(30deg)`}}
-                />
-              ) : null}
-            </div>
-          ))}
+      <div className={`burger-menu ${showDropdown ? '' : 'hidden'}`}>
+        {navItems.map((item: string, index: number) => (
+          <div className={'burger-item'} key={index}>
+            <ScrollLink
+              to={item.toLowerCase()}
+              smooth={false}
+              duration={100}
+              spy={true}
+              activeClass="active"
+              offset={-100}
+            >
+              {item}
+            </ScrollLink>
+            {(activeItem === item.toLowerCase()) ? (
+              <LiaPawSolid
+                className={'icon'}
+                style={{color: '#c0967d', transform: `rotate(30deg)`}}
+              />
+            ) : null}
+          </div>
+        ))}
+        <div className={'burger-item login'}>
+          {!user ? (
+            <Link to="/auth">
+              <IoLogInOutline className={'right-icon'}/> Kirjaudu sisään
+            </Link>
+          ) : (
+            <Link to="/" onClick={onLogout}>
+              <IoLogOutOutline className={'right-icon'}/> Kirjaudu ulos
+            </Link>
+          ) }
         </div>
+      </div>
     </header>
   );
 }

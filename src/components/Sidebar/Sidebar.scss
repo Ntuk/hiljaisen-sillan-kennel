@@ -39,4 +39,12 @@
       color: black;
     }
   }
+
+  &.mobile-sidebar {
+    flex-direction: row;
+    bottom: 0;
+    top: unset;
+    width: 100%;
+    justify-content: center;
+  }
 }

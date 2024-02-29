@@ -14,6 +14,19 @@ import { ToastContainer } from "react-toastify";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     firebaseApp;
@@ -39,7 +52,7 @@ function App() {
     <Router>
       <>
         <Navbar user={user} onLogout={handleLogout} />
-        <Sidebar />
+        <Sidebar className={windowWidth < 1100 ? 'mobile-sidebar' : ''} />
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/" element={

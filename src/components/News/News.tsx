@@ -3,7 +3,7 @@ import Dialog from '../Dialog/Dialog.tsx';
 import { useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase.ts';
-import Admin from "../Admin/Admin.tsx";
+import NewsAdmin from "../NewsAdmin/NewsAdmin.tsx";
 import { FaRegEye } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -30,6 +30,7 @@ function News({ user }: Props) {
   const [formData, setFormData] = useState<NewsData | null>(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState<boolean>(false);
   const [deletePostId, setDeletePostId] = useState<string>('');
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchNewsData = async () => {
@@ -52,6 +53,31 @@ function News({ user }: Props) {
 
     fetchNewsData();
   }, []);
+
+  useEffect(() => {
+    const fetchNewsData = async () => {
+      const newsCollection = collection(db, 'news');
+      const newsSnapshot = await getDocs(newsCollection);
+      const newsList: NewsData[] = newsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        title: doc.data().title,
+        content: doc.data().content,
+        date: new Date(doc.data().date.seconds * 1000),
+        imageUrl: doc.data().imageUrl,
+        views: doc.data().views,
+        editedDate: new Date(doc.data().editedDate?.seconds * 1000),
+      }));
+
+      newsList.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+      setData(newsList);
+    };
+
+    if (formSubmitted) {
+      fetchNewsData();
+      setFormSubmitted(false);
+    }
+  }, [formSubmitted]);
 
   useEffect(() => {
     const fetchAndOpenPost = async () => {
@@ -171,7 +197,7 @@ function News({ user }: Props) {
             <button className={'painike'} onClick={handleAdminClick}>Takaisin uutisiin</button>
           )}
         </div>
-        {isAdminOpen ? <Admin formData={formData} setIsAdminOpen={setIsAdminOpen} /> : <div className={'posts-container'}>
+        {isAdminOpen ? <NewsAdmin formData={formData} setIsAdminOpen={setIsAdminOpen} onFormSubmit={() => setFormSubmitted(true)} /> : <div className={'posts-container'}>
           <div className={'posts'}>
             {data.slice(0, 3).map(item => (
               <div key={item.id} className={'post-card'} onClick={() => toggleDialog(item.id)}>
@@ -209,7 +235,7 @@ function News({ user }: Props) {
                   <img src={item.imageUrl} alt={item.title}/>
                 </div>
                 <div className={'post-content-container'}>
-                  {isAdminOpen && <Admin formData={formData} />}
+                  {isAdminOpen && <NewsAdmin formData={formData} onFormSubmit={() => setFormSubmitted(true)} />}
                   <div className={'post-main-info'}>
                     <div className={'post-date'}>{item.date.toLocaleDateString('fi-FI', {
                       weekday: 'long',
