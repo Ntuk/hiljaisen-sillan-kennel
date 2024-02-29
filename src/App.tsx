@@ -46,7 +46,7 @@ function App() {
             <>
               <Hero/>
               <News user={user} />
-              <About />
+              <About user={user} />
               <Dogs />
               <Gallery />
             </>

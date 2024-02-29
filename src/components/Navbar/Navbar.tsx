@@ -104,7 +104,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
                 duration={100}
                 spy={true}
                 activeClass="active"
-                offset={-200}
+                offset={-100}
               >
                 {item}
               </ScrollLink>
@@ -147,7 +147,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
                 duration={100}
                 spy={true}
                 activeClass="active"
-                offset={-200}
+                offset={-100}
               >
                 {item}
               </ScrollLink>
