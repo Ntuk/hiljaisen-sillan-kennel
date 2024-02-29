@@ -222,7 +222,7 @@ function News({ user }: Props) {
                   })}
                   isOpen={!!isOpen[item.id]}
                   onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
-                  fullScreen={window.innerWidth <= 1265}
+                  fullScreen={window.innerWidth <= 1024}
                 >
                   <div className={'dialog-main-container'}>
                     <div className={'dialog-image'}>
@@ -277,7 +277,7 @@ function News({ user }: Props) {
                   })}
                   isOpen={!!isOpen[item.id]}
                   onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
-                  fullScreen={window.innerWidth <= 1265}
+                  fullScreen={window.innerWidth <= 1024}
                 >
                   <div className={'dialog-main-container'}>
                     <div className={'dialog-image'}>

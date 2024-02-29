@@ -18,12 +18,12 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const navItems = ['Etusivu', 'Uutiset', 'Meistä', 'Koirat', 'Galleria'];
+  const navItems = ['Etusivu', 'Uutiset', 'Meistä', 'Koirat'];
 
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
-      if (window.innerWidth > 1100) {
+      if (window.innerWidth > 1024) {
         setShowDropdown(false);
       }
     };
@@ -80,7 +80,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   };
 
   return (
-    <header className={windowWidth < 1100 ? 'center-content' : ''}>
+    <header className={windowWidth < 1024 ? 'center-content' : ''}>
       <Link to="/">
         <div className={'header-left'}>
           <div className={'logo-container'}>
@@ -91,7 +91,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           </div>
         </div>
       </Link>
-      {windowWidth > 1100 && (
+      {windowWidth > 1024 && (
         <div className={'header-middle'}>
           {navItems.map((item: string, index: number) => (
             <div
@@ -119,7 +119,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
         </div>
       )}
       <div className={'header-right'}>
-        {windowWidth <= 1100 ? (
+        {windowWidth <= 1024 ? (
           <div className={'hamburger-menu'} onClick={toggleDropdown}>
             <GiHamburgerMenu />
           </div>

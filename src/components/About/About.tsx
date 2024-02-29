@@ -74,13 +74,14 @@ function About({ user }: Props) {
           {isAdminOpen ? <AboutAdmin formData={formData} setIsAdminOpen={setIsAdminOpen} onFormSubmit={() => setFormSubmitted(true)} /> :
             <div className={'about-text'}>
               {data.map(item => (
-                <>
+                <div key={item.id}>
                   <div className={'image'} key={item.id}>
-                    <img src={item.imageUrl} alt={'Kuva'} />
+                    <img src={item.imageUrl} alt={'Kuva'} key={item.id} />
                   </div>
                   <span dangerouslySetInnerHTML={{__html: item.content }}>
-                  </span></>
-                ))}
+                  </span>
+                </div>
+              ))}
             </div>
           }
         </div>
