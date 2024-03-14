@@ -49,7 +49,6 @@ header {
     }
 
     .header-text {
-      //font-family: 'Gaby', sans-serif;
       font-family: "Lobster Two", sans-serif;
       text-wrap: nowrap;
       font-size: 2rem;
@@ -160,13 +159,13 @@ header {
 
   .burger-menu {
     position: absolute;
+    font-family: "Lobster Two", sans-serif;
     top: 5rem;
     left: 0;
     width: 100%;
-    border-bottom: 1px solid #ccc;
     transition: transform 0.3s ease-in-out;
     box-shadow: 0 1px 3px 1px rgba(24, 60, 52, 0.16);
-    background: url('../../assets/navbar-curve.svg') no-repeat;
+    background: rgba(255, 255, 255, 0.5) url('../../assets/navbar-curve.svg') no-repeat;
     background-size: cover;
 
     &.hidden {
@@ -180,6 +179,7 @@ header {
       font-size: 1.5rem;
       color: #112a25;
       transition: background-color 0.3s ease;
+      border-bottom: 1px solid black;
 
       .icon {
         font-size: 3rem;
