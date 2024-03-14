@@ -1,5 +1,6 @@
 @font-face {
-  font-family: 'Gaby';
+  //font-family: 'Gaby';
+  font-family: "Lobster Two", sans-serif;
   src: url('../../assets/gaby.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
@@ -48,7 +49,8 @@ header {
     }
 
     .header-text {
-      font-family: 'Gaby', sans-serif;
+      //font-family: 'Gaby', sans-serif;
+      font-family: "Lobster Two", sans-serif;
       text-wrap: nowrap;
       font-size: 2rem;
       color: black;
@@ -79,7 +81,9 @@ header {
     margin-right: 6rem;
 
     .nav-item {
+      font-family: "Lobster Two", sans-serif;
       display: flex;
+      font-size: 1.5rem;
       align-items: center;
       height: 100%;
       user-select: none;
