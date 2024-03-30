@@ -26,6 +26,7 @@ function Dogs({ user }: Props) {
       const dogsList: DogsData[] = dogsSnapshot.docs.map(doc => ({
         id: doc.id,
         name: doc.data().name,
+        kennelName: doc.data().kennelName,
         birthday: doc.data().birthday,
         description: doc.data().content,
         imageUrl: doc.data().imageUrl

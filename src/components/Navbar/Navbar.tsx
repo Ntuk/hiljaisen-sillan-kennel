@@ -87,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
             <img src={logo} alt="Logo"/>
           </div>
           <div className={`header-text ${user ? 'admin' : ''}`}>
-            {user ? 'Admin' : 'Hiljaisen sillan kennel'}
+            {user ? 'Admin' : 'Hiljaisen Sillan Kennel'}
           </div>
         </div>
       </Link>
