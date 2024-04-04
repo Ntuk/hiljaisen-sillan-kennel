@@ -9,7 +9,7 @@ import Dogs from './components/Dogs/Dogs.tsx';
 // import Gallery from './components/Gallery/Gallery.tsx';
 import Navbar from './components/Navbar/Navbar.tsx';
 import Sidebar from './components/Sidebar/Sidebar.tsx';
-import AuthPage from './components/Auth/Auth.tsx';
+// import AuthPage from './components/Auth/Auth.tsx';
 import { ToastContainer } from "react-toastify";
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
-      // console.log('user', user);
+      console.log('user', user);
       setUser(user || false);
     });
 
@@ -55,10 +55,11 @@ function App() {
         <Navbar user={user} onLogout={handleLogout} />
         <Sidebar className={windowWidth < 1100 ? 'mobile-sidebar' : ''} />
         <Routes>
-          <Route path="/auth" element={<AuthPage />} />
+          {/*<Route path="/auth" element={<AuthPage />} />*/}
           <Route path="/" element={
             <>
               <Hero/>
+              {/*<AuthPage />*/}
               <News user={user} />
               <About user={user} />
               <Dogs user={user} />

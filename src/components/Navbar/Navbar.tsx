@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { MdEmail, MdLocalPhone } from "react-icons/md";
 import { IoLogInOutline, IoLogOutOutline } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { auth, googleAuthProvider } from "../../firebase/firebase.ts";
+import { signInWithPopup } from "firebase/auth";
 
 interface NavbarProps {
   user: any;
@@ -79,15 +81,23 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
     setShowDropdown(!showDropdown);
   };
 
+  const handleSignInWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleAuthProvider);
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+    }
+  };
+
   return (
     <header className={windowWidth < 1024 ? 'center-content' : ''}>
       <Link to="/">
         <div className={'header-left'}>
           <div className={'logo-container'}>
-            <img src={logo} alt="Logo"/>
+            <img src={user ? user.photoURL : logo} alt="Logo" className={user ? 'user' : ''} />
           </div>
           <div className={`header-text ${user ? 'admin' : ''}`}>
-            {user ? 'Admin' : 'Hiljaisen Sillan Kennel'}
+            {user ? `Hei ${user.displayName.split(' ')[0]}` : 'Hiljaisen Sillan Kennel'}
           </div>
         </div>
       </Link>
@@ -137,7 +147,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
                 <IoLogOutOutline className={'right-icon'}/> Kirjaudu ulos
               </Link>
             ) : (
-              <Link to="/auth">
+              <Link to="#" onClick={handleSignInWithGoogle}>
                 <IoLogInOutline className={'right-icon'}/> Kirjaudu sisään
               </Link>
             )}
@@ -167,7 +177,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
         ))}
         <div className={'burger-item login'}>
           {!user ? (
-            <Link to="/auth">
+            <Link to="#" onClick={handleSignInWithGoogle}>
               <IoLogInOutline className={'right-icon'}/> Kirjaudu sisään
             </Link>
           ) : (

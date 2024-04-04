@@ -104,7 +104,8 @@
 .painike {
   border: 2px solid black;
   border-radius: 4px;
-  height: 2.25rem;
+  min-height: 2.25rem;
+  height: auto;
   background: #f1eae2;
   margin-right: 0.5rem;
 

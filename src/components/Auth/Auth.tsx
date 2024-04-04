@@ -12,8 +12,6 @@ const AuthPage: React.FC = () => {
         googleAuthProvider.providerId,
         emailAuthProvider.providerId
       ],
-      tosUrl: '<your-tos-url>',
-      privacyPolicyUrl: '<your-privacy-policy-url>',
     };
 
     const ui = new firebaseui.auth.AuthUI(auth);
