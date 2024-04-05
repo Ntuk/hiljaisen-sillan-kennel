@@ -118,3 +118,31 @@
     background: #daae7d;
   }
 }
+
+@media (max-width: 1200px) {
+  .image img {
+    width: 300px !important;
+    height: 300px !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .image img {
+    width: 200px !important;
+    height: 200px !important;
+  }
+}
+
+@media (max-width: 934px) {
+  .items-container {
+    flex-direction: column;
+  }
+  .text-items {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+  .item {
+    width: 100%;
+  }
+}
+

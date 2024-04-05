@@ -6,6 +6,7 @@ import { db } from '../../firebase/firebase.ts';
 import NewsAdmin from "../NewsAdmin/NewsAdmin.tsx";
 import { FaRegEye } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
+import PageHeader from "../PageHeader/PageHeader.tsx";
 
 interface NewsData {
   id: string;
@@ -185,18 +186,27 @@ function News({ user }: Props) {
     closeDeleteConfirmation();
   };
 
+  const writeNewsButton = (
+    <button className={'painike'} onClick={handleAdminClick}>
+      Kirjoita uusi uutinen
+    </button>
+  );
+
+  const backToNewsButton = (
+    <button className={'painike'} onClick={handleAdminClick}>
+      Takaisin uutisiin
+    </button>
+  );
+
   return (
     <section id={'uutiset'} data-scroll={'uutiset'} className={'news-container'}>
       <div className={'news-content'}>
-        <div className={'header-container'}>
-          <span className={'news-header'}>Ajankohtaista</span>
-          {user && !isAdminOpen && (
-            <button className={'painike'} onClick={handleAdminClick}>Kirjoita uusi uutinen</button>
-          )}
-          {user && isAdminOpen && (
-            <button className={'painike'} onClick={handleAdminClick}>Takaisin uutisiin</button>
-          )}
-        </div>
+        <PageHeader
+          title="Ajankohtaista"
+          isAdminOpen={isAdminOpen}
+          leftButton={writeNewsButton}
+          rightButton={backToNewsButton}
+        />
         {isAdminOpen ? <NewsAdmin formData={formData} setIsAdminOpen={setIsAdminOpen} onFormSubmit={() => setFormSubmitted(true)} /> : <div className={'posts-container'}>
           <div className={'posts'}>
             {data.slice(0, 3).map(item => (
@@ -252,49 +262,51 @@ function News({ user }: Props) {
               </div>
             ))}
           </div>
-          <div className={'post-list'}>
-            <span className={'post-header'}>Vanhemmat uutiset</span>
-            {data.slice(3).map(item => (
-              <div key={item.id} className={'post-link'} onClick={() => toggleDialog(item.id)}>
-                <Dialog
-                  key={item.id}
-                  heading={item.title}
-                  id={item.id}
-                  user={user}
-                  editPost={() => editPost(item.id)}
-                  deletePost={() => openDeleteConfirmation(item.id)}
-                  editedDate={item.editedDate instanceof Date ? item.editedDate.toLocaleDateString('fi-FI', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  }) || '' : ''}
-                  date={item.date.toLocaleDateString('fi-FI', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                  isOpen={!!isOpen[item.id]}
-                  onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
-                  fullScreen={window.innerWidth <= 1024}
-                >
-                  <div className={'dialog-main-container'}>
-                    <div className={'dialog-image'}>
-                      <img src={item.imageUrl} alt={item.title}/>
+          {data.length > 3 && (
+            <div className={'post-list'}>
+              <span className={'post-header'}>Vanhemmat uutiset</span>
+              {data.slice(3).map(item => (
+                <div key={item.id} className={'post-link'} onClick={() => toggleDialog(item.id)}>
+                  <Dialog
+                    key={item.id}
+                    heading={item.title}
+                    id={item.id}
+                    user={user}
+                    editPost={() => editPost(item.id)}
+                    deletePost={() => openDeleteConfirmation(item.id)}
+                    editedDate={item.editedDate instanceof Date ? item.editedDate.toLocaleDateString('fi-FI', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    }) || '' : ''}
+                    date={item.date.toLocaleDateString('fi-FI', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                    isOpen={!!isOpen[item.id]}
+                    onClose={() => setIsOpen(prevState => ({...prevState, [item.id]: false}))}
+                    fullScreen={window.innerWidth <= 1024}
+                  >
+                    <div className={'dialog-main-container'}>
+                      <div className={'dialog-image'}>
+                        <img src={item.imageUrl} alt={item.title}/>
+                      </div>
+                      <div className={'dialog-text'} dangerouslySetInnerHTML={{__html: item.content}}/>
                     </div>
-                    <div className={'dialog-text'} dangerouslySetInnerHTML={{__html: item.content}}/>
+                  </Dialog>
+                  <div className={'mini-post-card'}>
+                    <div className={'mini-post-meta'}><FaRegEye /> {item.views}</div>
+                    <img src={item.imageUrl} alt={item.title} onClick={() => toggleDialog(item.id)}/>
+                    <span className={'mini-post-date'}>{item.date.toLocaleDateString('fi-FI')}</span>
+                    <div className={'mini-post-header'}>{item.title}</div>
                   </div>
-                </Dialog>
-                <div className={'mini-post-card'}>
-                  <div className={'mini-post-meta'}><FaRegEye /> {item.views}</div>
-                  <img src={item.imageUrl} alt={item.title} onClick={() => toggleDialog(item.id)}/>
-                  <span className={'mini-post-date'}>{item.date.toLocaleDateString('fi-FI')}</span>
-                  <div className={'mini-post-header'}>{item.title}</div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>}
       </div>
       <div className={'news-spacer'}/>

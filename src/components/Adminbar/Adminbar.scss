@@ -27,6 +27,14 @@
 
       img {
         width: 100%;
+        border-radius: 50%;
+
+        &.user {
+          border: 1px solid black;
+          max-height: 60px;
+          max-width: 60px;
+          border-radius: 50%;
+        }
       }
 
       &:hover {
@@ -92,11 +100,6 @@
         cursor: pointer;
         background: rgba(243, 223, 215, 0.3);
       }
-
-      //&:focus {
-      //  cursor: pointer;
-      //  background: rgba(243, 223, 215, 0.4);
-      //}
 
       &:active {
         background: rgba(243, 223, 215, 0.5);

@@ -10,16 +10,15 @@
   flex-direction: column;
   width: 100%;
   padding: 0 5rem;
+  align-items: center;
 
   .header-container {
     display: flex;
+    width: 100%;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 2rem;
-
-    .news-header {
-      font-family: "Lobster Two", sans-serif;
-      font-size: 4rem;
-    }
+    max-width: 60rem;
 
     .painike {
       border: 2px solid black;
@@ -77,6 +76,7 @@
         .post-content-container {
           padding: 2rem;
           display: flex;
+          width: 100%;
           justify-content: space-between;
           flex-direction: column;
           position: relative;
@@ -229,15 +229,9 @@
   }
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 934px) {
   .news-content {
     padding: 0 1rem;
-
-    .news-header {
-      font-size: 2.5rem;
-      display: flex;
-      justify-content: center;
-    }
 
     .posts-container {
       flex-direction: column;
@@ -292,11 +286,6 @@
 @media only screen and (max-width: 599px) {
   .header-container {
     margin-bottom: 1rem !important;
-
-    .news-header {
-      font-size: 3rem !important;
-      margin-bottom: 0 !important;
-    }
   }
   .post-card {
     flex-direction: column-reverse !important;
@@ -316,9 +305,15 @@
   }
 }
 
+@media only screen and (max-width: 476px) {
+  .header-container {
+    margin-bottom: 0.5rem !important;
+  }
+}
+
 @media only screen and (min-width: 600px) and (max-width: 1019px) {
-  .news-header {
-    font-size: 3rem !important;
+  .header-container {
+    margin-bottom: 1rem !important;
   }
   .post-card {
     flex-direction: row !important;
@@ -334,34 +329,30 @@
   }
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 934px) {
   .news-content {
     padding: 0 5rem;
+  }
+}
 
-    .news-header {
-      font-size: 4rem;
+@media only screen and (max-width: 934px) {
+  .posts-container .post-list .post-link .mini-post-card {
+    width: 100% !important;
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  .post-link {
+    .mini-post-card {
+      width: 20rem !important;
     }
+  }
+}
 
-    .posts-container {
-      flex-direction: row;
-
-      .posts {
-        max-width: 60rem;
-
-        .post-card {
-          width: auto;
-        }
-      }
-
-      .post-list {
-        width: 30rem;
-
-        .post-link {
-          .mini-post-card {
-            height: 4rem;
-          }
-        }
-      }
+@media only screen and (max-width: 1150px) {
+  .post-link {
+    .mini-post-card {
+      width: 15rem !important;
     }
   }
 }

@@ -53,7 +53,7 @@ function App() {
     <Router>
       <>
         <Navbar user={user} onLogout={handleLogout} />
-        <Sidebar className={windowWidth < 1100 ? 'mobile-sidebar' : ''} />
+        <Sidebar className={windowWidth < 934 ? 'mobile-sidebar' : ''} />
         <Routes>
           {/*<Route path="/auth" element={<AuthPage />} />*/}
           <Route path="/" element={

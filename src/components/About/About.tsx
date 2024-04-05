@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebase.ts";
 import AboutAdmin from "../AboutAdmin/AboutAdmin.tsx";
+import PageHeader from "../PageHeader/PageHeader.tsx";
 
 export interface AboutData {
   id: string;
@@ -61,16 +62,28 @@ function About({ user }: Props) {
     setFormData(aboutData ? {...aboutData} : null);
   };
 
+  const editAboutButton = (
+    <button className={'painike'} onClick={editAbout}>
+      Muokkaa
+    </button>
+  );
+
+  const backToAboutButton = (
+    <button className={'painike'} onClick={() => setIsAdminOpen(false)}>
+      Takaisin
+    </button>
+  );
+
   return (
     <section id={'meistä'} data-scroll={'meistä'} className={'about-container'}>
       <div className={'about-content'}>
         <div className={'about-header-text-container'}>
-          <div className={'about-header-container'}>
-            <span className={'about-header'}>Meistä</span>
-            {user && !isAdminOpen && (
-              <button className={'painike'} onClick={editAbout}>Muokkaa</button>
-            )}
-          </div>
+          <PageHeader
+            title="Meistä"
+            isAdminOpen={isAdminOpen}
+            leftButton={editAboutButton}
+            rightButton={backToAboutButton}
+          />
           {isAdminOpen ? <AboutAdmin formData={formData} setIsAdminOpen={setIsAdminOpen} onFormSubmit={() => setFormSubmitted(true)} /> :
             <div className={'about-text'}>
               {data.map(item => (

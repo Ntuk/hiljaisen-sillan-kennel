@@ -14,17 +14,20 @@
 
 .about-content {
   display: flex;
+  justify-content: center;
   width: 100%;
   padding: 0 5rem;
 
   .about-header-text-container {
     width: 100%;
+    max-width: 60rem;
     display: flex;
     flex-direction: column;
 
     .about-header-container {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       margin-bottom: 2rem;
 
       .painike {
@@ -71,12 +74,15 @@
   .about-header-container {
     margin-bottom: 0 !important;
   }
-  img {
+  .image img {
     border-radius: 4px !important;
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 768px) {
+  .about-header-container {
+    margin-bottom: 0 !important;
+  }
   .about-content {
     flex-direction: column;
     padding: 0 2rem;
@@ -93,7 +99,9 @@
       float: none !important;
 
       img {
-        max-width: 100% !important;
+        width: 100% !important;
+        max-width: none !important;
+        border-radius: 4px !important;
       }
     }
   }

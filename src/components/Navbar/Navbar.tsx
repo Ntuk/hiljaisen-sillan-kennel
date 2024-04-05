@@ -25,7 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
-      if (window.innerWidth > 1024) {
+      if (window.innerWidth > 934) {
         setShowDropdown(false);
       }
     };
@@ -90,18 +90,18 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   };
 
   return (
-    <header className={windowWidth < 1024 ? 'center-content' : ''}>
+    <header className={windowWidth < 934 ? 'center-content' : ''}>
       <Link to="/">
         <div className={'header-left'}>
           <div className={'logo-container'}>
             <img src={user ? user.photoURL : logo} alt="Logo" className={user ? 'user' : ''} />
           </div>
           <div className={`header-text ${user ? 'admin' : ''}`}>
-            {user ? `Hei ${user.displayName.split(' ')[0]}` : 'Hiljaisen Sillan Kennel'}
+            {'Hiljaisen Sillan Kennel'}
           </div>
         </div>
       </Link>
-      {windowWidth > 1024 && (
+      {windowWidth > 933 && (
         <div className={'header-middle'}>
           {navItems.map((item: string, index: number) => (
             <div
@@ -129,7 +129,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
         </div>
       )}
       <div className={'header-right'}>
-        {windowWidth <= 1024 ? (
+        {windowWidth < 934 ? (
           <div className={'hamburger-menu'} onClick={toggleDropdown}>
             <GiHamburgerMenu />
           </div>
