@@ -62,7 +62,7 @@ function App() {
               {/*<AuthPage />*/}
               <News user={user} />
               <About />
-              <Dogs user={user} />
+              <Dogs />
               {/*<Gallery />*/}
             </>
           } />
