@@ -61,7 +61,7 @@ function App() {
               <Hero/>
               {/*<AuthPage />*/}
               <News user={user} />
-              <About user={user} />
+              <About />
               <Dogs user={user} />
               {/*<Gallery />*/}
             </>

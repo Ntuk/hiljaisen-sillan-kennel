@@ -11,11 +11,7 @@ export interface AboutData {
   imageUrl: string;
 }
 
-interface Props {
-  user: any;
-}
-
-function About({ user }: Props) {
+function About() {
   const [data, setData] = useState<AboutData[]>([]);
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<AboutData | null>(null);
