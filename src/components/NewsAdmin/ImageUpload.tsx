@@ -1,4 +1,5 @@
 import ImageUploading from 'react-images-uploading';
+import Resizer from "react-image-file-resizer";
 import { ImageType } from "react-images-uploading/dist/typings";
 import { useEffect, useState } from "react";
 
@@ -12,11 +13,41 @@ function ImageUpload({ onImageUpload, onBase64Upload, previewImage }: ImageUploa
   const [images, setImages] = useState<ImageType[]>([]);
   const maxNumber = 69;
 
-  const onChange = (imageList: ImageType[]) => {
-    const base64Images = imageList.map((image) => image.data_url);
-    setImages(imageList);
-    onImageUpload(imageList);
-    onBase64Upload(base64Images);
+  const onChange = async (imageList: ImageType[]) => {
+    try {
+      const resizedImages = await Promise.all(imageList.map(async (image) => {
+        const resizedImage = await resizeImage(image.file);
+        return {
+          ...image,
+          data_url: resizedImage,
+        };
+      }));
+      const base64Images: string[] = resizedImages.map((image) => image.data_url);
+      setImages(resizedImages);
+      onImageUpload(resizedImages);
+      onBase64Upload(base64Images);
+    } catch (error) {
+      console.error("Error resizing images:", error);
+    }
+  };
+
+  const resizeImage = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        500,
+        500,
+        'PNG',
+        100,
+        0,
+        (uri) => {
+          resolve(uri as string);
+        },
+        'base64',
+        500,
+        500
+      );
+    });
   };
 
   useEffect(() => {

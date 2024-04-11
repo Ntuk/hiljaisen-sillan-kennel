@@ -18,11 +18,7 @@ interface NewsData {
   editedDate?: Date;
 }
 
-interface Props {
-  user: any;
-}
-
-function News({ user }: Props) {
+function News({ user }) {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState<{ [id: string]: boolean }>({});
@@ -186,17 +182,17 @@ function News({ user }: Props) {
     closeDeleteConfirmation();
   };
 
-  const writeNewsButton = (
+  const writeNewsButton = user ? (
     <button className={'painike'} onClick={handleAdminClick}>
       Kirjoita uusi uutinen
     </button>
-  );
+  ) : null;
 
-  const backToNewsButton = (
+  const backToNewsButton = user ? (
     <button className={'painike'} onClick={handleAdminClick}>
       Takaisin uutisiin
     </button>
-  );
+  ) : null;
 
   return (
     <section id={'uutiset'} data-scroll={'uutiset'} className={'news-container'}>

@@ -85,7 +85,7 @@
   }
   .about-content {
     flex-direction: column;
-    padding: 0 2rem;
+    padding: 0 1rem;
   }
 
   .about-content .about-text {
@@ -106,3 +106,11 @@
     }
   }
 }
+
+@media screen and (max-width: 934px) {
+  .about-content {
+    flex-direction: column;
+    padding: 0 1.5rem !important;
+  }
+}
+

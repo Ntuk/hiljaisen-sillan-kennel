@@ -3,17 +3,25 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebase.ts";
 import PageHeader from "../PageHeader/PageHeader.tsx";
+import DogsCarousel from "../DogsCarousel/DogsCarousel.tsx";
+import DogInfo from "../DogInfo/DogInfo.tsx";
 
 export interface DogsData {
   id: string;
   name: string;
+  kennelName: string;
+  mom: string;
+  dad: string;
   birthday: Date;
   description: string;
+  size: string;
   imageUrl: string;
+  deceased?: Date
 }
 
-function Dogs() {
+function Dogs({ user }) {
   const [data, setData] = useState<DogsData[]>([]);
+  const [activeDog, setActiveDog] = useState<DogsData | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -23,45 +31,41 @@ function Dogs() {
       const dogsList: DogsData[] = dogsSnapshot.docs.map(doc => ({
         id: doc.id,
         name: doc.data().name,
+        kennelName: doc.data().kennelName,
         mom: doc.data().mom,
         dad: doc.data().dad,
-        kennelName: doc.data().kennelName,
-        birthday: doc.data().birthday,
+        birthday: doc.data().birthday.toDate(),
         description: doc.data().description,
-        imageUrl: doc.data().imageUrl
+        size: doc.data().size,
+        imageUrl: doc.data().imageUrl,
+        deceased: doc.data().deceased,
       }));
 
       setData(dogsList);
-      console.log('isAdminOpen', isAdminOpen);
     };
 
     fetchDogsData();
   }, []);
 
-  useEffect(() => {
-    if (data) {
-      console.log('Dogs data', data);
-    }
-  }, [data]);
-
-  const editDogs = async () => {
-    console.log('edit dogs..')
-    // const aboutData = data.find(aboutData => aboutData.content);
-    // setIsAdminOpen(true);
-    // setFormData(aboutData ? {...aboutData} : null);
+  const handleDogChange = (newActiveDog: DogsData) => {
+    setActiveDog(newActiveDog);
   };
 
-  const editDogsButton = (
+  const editDogs = async () => {
+    setIsAdminOpen(true);
+  };
+
+  const editDogsButton = user ? (
     <button className={'painike'} onClick={editDogs}>
       Muokkaa
     </button>
-  );
+  ) : null;
 
-  const backToDogsButton = (
+  const backToDogsButton = user ? (
     <button className={'painike'} onClick={() => setIsAdminOpen(false)}>
       Takaisin
     </button>
-  );
+  ) : null;
 
   return (
     <section id={'koirat'} data-scroll={'koirat'} className={'dogs-container'}>
@@ -73,11 +77,15 @@ function Dogs() {
             leftButton={editDogsButton}
             rightButton={backToDogsButton}
           />
+          <div className={'carousel-container'}>
+            <DogsCarousel data={data} onDogChange={handleDogChange} />
+            <DogInfo dogInfo={activeDog} />
+          </div>
         </div>
       </div>
       <div className={'dogs-spacer'}/>
     </section>
-)
+  )
 }
 
 export default Dogs

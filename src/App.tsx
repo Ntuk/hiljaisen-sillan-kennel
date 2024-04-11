@@ -59,10 +59,9 @@ function App() {
           <Route path="/" element={
             <>
               <Hero/>
-              {/*<AuthPage />*/}
               <News user={user} />
-              <About />
-              <Dogs />
+              <About user={user} />
+              <Dogs user={user} />
               {/*<Gallery />*/}
             </>
           } />

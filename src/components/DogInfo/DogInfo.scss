@@ -1,0 +1,29 @@
+.dog-info {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  .name-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .name {
+      font-family: "Lobster Two", sans-serif;
+      font-size: 2rem;
+    }
+
+    .kennel-name {
+      margin-left: 0.25rem;
+      font-family: "Lobster Two", sans-serif;
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+ .name-container {
+   flex-direction: column !important;
+   align-items: initial !important;
+ }
+}

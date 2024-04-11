@@ -11,7 +11,7 @@ export interface AboutData {
   imageUrl: string;
 }
 
-function About() {
+function About({ user }) {
   const [data, setData] = useState<AboutData[]>([]);
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<AboutData | null>(null);
@@ -58,17 +58,17 @@ function About() {
     setFormData(aboutData ? {...aboutData} : null);
   };
 
-  const editAboutButton = (
+  const editAboutButton = user ? (
     <button className={'painike'} onClick={editAbout}>
       Muokkaa
     </button>
-  );
+  ) : null;
 
-  const backToAboutButton = (
+  const backToAboutButton = user ? (
     <button className={'painike'} onClick={() => setIsAdminOpen(false)}>
       Takaisin
     </button>
-  );
+  ) : null;
 
   return (
     <section id={'meistä'} data-scroll={'meistä'} className={'about-container'}>

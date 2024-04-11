@@ -1,0 +1,22 @@
+.carousel-slider {
+  border-radius: 4px;
+  height: auto;
+}
+
+.thumb {
+  border: 0 !important;
+  border-radius: 4px !important;
+  padding: 0 !important;
+  box-shadow: 0 0 0 1px rgba(24, 60, 52, 0.08), 0 4px 12px 0 rgba(24, 60, 52, 0.25);
+
+  &.selected {
+    box-shadow: 0 0 0 1px rgba(24, 60, 52, 0.08), 0 4px 12px 0 rgba(24, 60, 52, 0.75);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .carousel-slider {
+    //max-height: 40vh !important;
+  }
+}
+
