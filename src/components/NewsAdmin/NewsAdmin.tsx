@@ -1,7 +1,7 @@
 import './NewsAdmin.scss';
-import TextEditor, { TextEditorRef } from "./TextEditor.tsx";
+import TextEditor, { TextEditorRef } from "../TextEditor/TextEditor.tsx";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import ImageUpload from "./ImageUpload.tsx";
+import ImageUpload from "../ImageUpload/ImageUpload.tsx";
 import { collection, addDoc, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from "../../firebase/firebase.ts";
 import { Bounce, toast } from 'react-toastify';

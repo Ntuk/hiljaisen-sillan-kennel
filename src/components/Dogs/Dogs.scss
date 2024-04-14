@@ -8,6 +8,8 @@
 .dogs-content {
   display: flex;
   flex-direction: column;
+  z-index: 1;
+  position: relative;
   width: 100%;
   padding: 0 5rem;
   align-items: center;

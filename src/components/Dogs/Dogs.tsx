@@ -5,6 +5,7 @@ import { db } from "../../firebase/firebase.ts";
 import PageHeader from "../PageHeader/PageHeader.tsx";
 import DogsCarousel from "../DogsCarousel/DogsCarousel.tsx";
 import DogInfo from "../DogInfo/DogInfo.tsx";
+import DogsAdmin from "../DogsAdmin/DogsAdmin.tsx";
 
 export interface DogsData {
   id: string;
@@ -51,6 +52,29 @@ function Dogs({ user }) {
     setActiveDog(newActiveDog);
   };
 
+  const handleFormSubmit = () => {
+    const fetchDogsData = async () => {
+      const dogsCollection = collection(db, 'dogs');
+      const dogsSnapshot = await getDocs(dogsCollection);
+      const dogsList: DogsData[] = dogsSnapshot.docs.map(doc => ({
+        id: doc.id,
+        name: doc.data().name,
+        kennelName: doc.data().kennelName,
+        mom: doc.data().mom,
+        dad: doc.data().dad,
+        birthday: doc.data().birthday.toDate(),
+        description: doc.data().description,
+        size: doc.data().size,
+        imageUrl: doc.data().imageUrl,
+        deceased: doc.data().deceased,
+      }));
+
+      setData(dogsList);
+    };
+
+    fetchDogsData();
+  };
+
   const editDogs = async () => {
     setIsAdminOpen(true);
   };
@@ -77,10 +101,12 @@ function Dogs({ user }) {
             leftButton={editDogsButton}
             rightButton={backToDogsButton}
           />
-          <div className={'carousel-container'}>
+          {isAdminOpen ? <DogsAdmin onFormSubmit={handleFormSubmit} setIsAdminOpen={setIsAdminOpen} /> :
+                <div className={'carousel-container'}>
             <DogsCarousel data={data} onDogChange={handleDogChange} />
             <DogInfo dogInfo={activeDog} />
           </div>
+          }
         </div>
       </div>
       <div className={'dogs-spacer'}/>

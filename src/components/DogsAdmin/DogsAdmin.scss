@@ -1,13 +1,38 @@
 .admin-container {
   min-height: 90vh;
-  //background: #CB997E;
   position: relative;
+  width: 100%;
 }
 
 .admin-content {
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  .dogs-admin-container {
+    display: flex;
+
+    .dogs-list {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 300px;
+
+      .painike {
+        margin-bottom: 0.75rem;
+      }
+    }
+
+    .dogs-admin-edit {
+      width: 100%;
+      padding-left: 1rem;
+
+      form .items-container {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
 
   .items-container {
     display: flex;
@@ -40,6 +65,20 @@
       &:focus {
         outline: 2px solid #734919;
       }
+    }
+
+    textarea {
+      padding-left: 0.5rem;
+      outline: 2px solid black;
+      border: 0;
+      border-radius: 4px;
+      width: 100%;
+      height: 10rem;
+
+      &:focus {
+        outline: 2px solid #734919;
+      }
+
     }
 
     .image-item {
@@ -120,29 +159,11 @@
 }
 
 @media (max-width: 1200px) {
-  .image img {
-    width: 300px !important;
-    height: 300px !important;
-  }
 }
 
 @media (max-width: 1000px) {
-  .image img {
-    width: 200px !important;
-    height: 200px !important;
-  }
 }
 
 @media (max-width: 934px) {
-  .items-container {
-    flex-direction: column;
-  }
-  .text-items {
-    width: 100% !important;
-    padding: 0 !important;
-  }
-  .item {
-    width: 100%;
-  }
 }
 
