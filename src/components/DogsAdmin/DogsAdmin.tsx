@@ -6,6 +6,7 @@ import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImageUpload from "../ImageUpload/ImageUpload.tsx";
 import { ImageType } from "react-images-uploading/dist/typings";
+import { FaCross } from "react-icons/fa";
 
 interface DogsFormData {
   id?: string;
@@ -32,6 +33,7 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
   const [mom, setMom] = useState<string>('');
   const [dad, setDad] = useState<string>('');
   const [birthday, setBirthday] = useState<Date>(new Date());
+  const [deceased, setDeceased] = useState<Date | undefined>(undefined);
   const [description, setDescription] = useState<string>('');
   const [size, setSize] = useState<string>('');
   const [imageUrl, setImageUrl] = useState<string>('');
@@ -43,8 +45,8 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
   const momRef = useRef<HTMLInputElement>(null);
   const dadRef = useRef<HTMLInputElement>(null);
   const birthdayRef = useRef<HTMLInputElement>(null);
+  const deceasedRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const sizeRef = useRef<HTMLInputElement>(null);
 
 
   useEffect(() => {
@@ -54,6 +56,7 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
       setMom(formData.mom);
       setDad(formData.dad);
       setBirthday(formData.birthday);
+      setDeceased(formData.deceased);
       setDescription(formData.description);
       setSize(formData.size);
       setImageUrl(formData.imageUrl);
@@ -112,6 +115,10 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
         imageUrl: imageUrl
       };
 
+      if (deceased) {
+        newFormData.deceased = deceased;
+      }
+
       console.log("Form data submitted:", newFormData);
 
       try {
@@ -127,7 +134,7 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
           // Add a new dog
           const docRef = await addDoc(collection(db, 'dogs'), newFormData);
           console.log('Document written with ID: ', docRef.id);
-          notifySuccess('New dog added successfully');
+          notifySuccess(`${selectedDog.name} lisätty onnistuneesti.`);
           setIsAdminOpen(false);
           onFormSubmit();
         }
@@ -155,12 +162,12 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
 
   const handleDogSelect = (dog: DogsFormData) => {
     setSelectedDog(dog);
-    // Populate form fields with selected dog's information
     setName(dog.name);
     setKennelName(dog.kennelName);
     setMom(dog.mom);
     setDad(dog.dad);
     setBirthday(dog.birthday);
+    setDeceased(dog.deceased);
     setDescription(dog.description);
     setSize(dog.size);
     setImageUrl(dog.imageUrl);
@@ -170,17 +177,19 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
     console.log('base64Images', base64Images);
   };
 
-  // const handleAddNewDog = () => {
-  //   setName('');
-  //   setKennelName('');
-  //   setMom('');
-  //   setDad('');
-  //   setBirthday(new Date());
-  //   setDescription('');
-  //   setSize('');
-  //   setImageUrl('');
-  //   setSelectedDog(null);
-  // };
+  const setFormattedBirthday = (dateString: string) => {
+    const [year, month, day] = dateString.split('-');
+    const formattedMonth = month.length === 1 ? `0${month}` : month;
+    const formattedDate = new Date(`${year}-${formattedMonth}-${day}`);
+    setBirthday(formattedDate);
+  };
+
+  const setFormattedDeceased = (dateString: string) => {
+    const [year, month, day] = dateString.split('-');
+    const formattedMonth = month.length === 1 ? `0${month}` : month;
+    const formattedDate = new Date(`${year}-${formattedMonth}-${day}`);
+    setDeceased(formattedDate);
+  };
 
   return (
     <section id={'admin'} data-scroll={'admin'} className={'admin-container'}>
@@ -189,11 +198,11 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
           <div className={'dogs-list'}>
             <span className={'header'}>Valitse koira:</span>
             {dogs.map((dog) => (
-              <div key={dog.id}>
+              <div className={'dog-avatar-button'} key={dog.id}>
                 <button onClick={() => handleDogSelect(dog)} className={'painike'}>{dog.name}</button>
+                <img className={'dog-avatar'} src={dog.imageUrl} alt={dog.name} />
               </div>
             ))}
-            {/*<button onClick={handleAddNewDog} className={'painike'} style={{ marginTop: '1rem' }}>Lisää uusi</button>*/}
           </div>
           <div className={'dogs-admin-edit'}>
             <form onSubmit={handleSubmit}>
@@ -221,7 +230,15 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
                   </div>
                   <div className={'item header'}>
                     <span>Syntymäpäivä:</span>
-                    <input type="date" name="birthday" defaultValue={birthday instanceof Date ? birthday.toISOString().substr(0, 10) : ''} ref={birthdayRef} onChange={(e) => setBirthday(new Date(e.target.value))}/>
+                    <input type="date" name="birthday"
+                           defaultValue={birthday instanceof Date ? birthday.toISOString().substr(0, 10) : ''}
+                           ref={birthdayRef} onChange={(e) => setFormattedBirthday(e.target.value)} />
+                  </div>
+                  <div className={'item header'}>
+                    <span>Kuolinpäivä <FaCross /> (voi jättää täyttämättä):</span>
+                    <input type="date" name="deceased"
+                           defaultValue={deceased instanceof Date ? deceased.toISOString().substr(0, 10) : ''}
+                           ref={deceasedRef} onChange={(e) => setFormattedDeceased(e.target.value)} />
                   </div>
                   <div className={'item header'}>
                     <span>Kuvaus:</span>
@@ -230,12 +247,47 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
                   </div>
                   <div className={'item header'}>
                     <span>Koko:</span>
-                    <input type="text" name="size" defaultValue={size} ref={sizeRef}
-                           onChange={(e) => setSize(e.target.value)}/>
+                    <div>
+                      <label>
+                        <input
+                          type="radio"
+                          name="size"
+                          value="kaniini"
+                          checked={size === "kaniini"}
+                          onChange={(e) => setSize(e.target.value)}
+                        />
+                        Kaniini
+                      </label>
+                    </div>
+                    <div>
+                      <label>
+                        <input
+                          type="radio"
+                          name="size"
+                          value="kääpiö"
+                          checked={size === "kääpiö"}
+                          onChange={(e) => setSize(e.target.value)}
+                        />
+                        Kääpiö
+                      </label>
+                    </div>
+                    <div>
+                      <label>
+                        <input
+                          type="radio"
+                          name="size"
+                          value="normaali"
+                          checked={size === "normaali"}
+                          onChange={(e) => setSize(e.target.value)}
+                        />
+                        Normaali
+                      </label>
+                    </div>
                   </div>
                   <div className={'item header'}>
                     <span>Kuva:</span>
-                    <ImageUpload onImageUpload={handleImageUpload} previewImage={imageUrl}  onBase64Upload={handleBase64Upload} />
+                    <ImageUpload onImageUpload={handleImageUpload} previewImage={imageUrl}
+                                 onBase64Upload={handleBase64Upload}/>
                   </div>
                 </div>
               </div>

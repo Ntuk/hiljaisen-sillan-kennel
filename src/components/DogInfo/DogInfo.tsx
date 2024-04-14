@@ -1,5 +1,6 @@
 import './DogInfo.scss'
 import { DogsData } from "../Dogs/Dogs.tsx";
+import { FaCross } from "react-icons/fa";
 
 interface DogInfoProps {
   dogInfo: DogsData;
@@ -19,6 +20,15 @@ function DogInfo({ dogInfo }: DogInfoProps) {
         month: 'long',
         day: 'numeric'
       })}</span>
+      {dogInfo.deceased instanceof Date && (
+        <span style={{ display: 'flex', alignItems: 'center' }}>
+          <b>Kuolinpäivä: </b> {dogInfo.deceased.toLocaleDateString('fi', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })} <FaCross />
+        </span>
+      )}
       <span><b>Äiti:</b> {dogInfo.mom}</span>
       <span><b>Isä:</b> {dogInfo.dad}</span>
       <span><b>Koko:</b> {dogInfo.size}</span>

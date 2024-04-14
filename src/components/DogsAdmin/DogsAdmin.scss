@@ -16,7 +16,19 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      max-width: 300px;
+      max-width: 200px;
+
+      .dog-avatar-button {
+        display: flex;
+        justify-content: space-between;
+
+        .dog-avatar {
+          width: 40px;
+          height: 40px;
+          border: 1px solid black;
+          border-radius: 50px;
+        }
+      }
 
       .painike {
         margin-bottom: 0.75rem;
@@ -45,10 +57,11 @@
   }
 
   span {
-    display: block;
+    display: flex;
     font-weight: 600;
     font-size: 1rem;
     margin-bottom: 0.25rem;
+    align-items: center;
   }
 
   .item {
@@ -65,6 +78,13 @@
       &:focus {
         outline: 2px solid #734919;
       }
+    }
+
+    input[type='radio'] {
+      outline: none;
+      width: auto;
+      height: auto;
+      margin-right: 0.25rem;
     }
 
     textarea {
@@ -165,5 +185,17 @@
 }
 
 @media (max-width: 934px) {
+  .dogs-admin-container {
+    flex-direction: column;
+  }
+
+  .dogs-list {
+    max-width: unset !important;
+  }
+
+  .image-placeholder {
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
 }
 

@@ -1,6 +1,35 @@
+// This class is needed to make the props to work for whatever reason.. Found from Github issues: https://github.com/leandrowd/react-responsive-carousel/issues/726
+.dogs-carousel {
+}
+
 .carousel-slider {
   border-radius: 4px;
-  height: auto;
+}
+
+.slider-wrapper {
+  width: 400px !important;
+}
+
+.carousel .slide {
+  height: 500px;
+
+  div {
+    height: 100%;
+    background: pink;
+    object-fit: cover;
+    display: flex;
+  }
+
+  img {
+    height: auto;
+    width: 480px;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.carousel-status {
+  display: none;
 }
 
 .thumb {
@@ -8,15 +37,32 @@
   border-radius: 4px !important;
   padding: 0 !important;
   box-shadow: 0 0 0 1px rgba(24, 60, 52, 0.08), 0 4px 12px 0 rgba(24, 60, 52, 0.25);
+  height: 80px;
+  object-fit: cover;
+
+  img {
+    height: 100%;
+    object-fit: cover;
+  }
 
   &.selected {
     box-shadow: 0 0 0 1px rgba(24, 60, 52, 0.08), 0 4px 12px 0 rgba(24, 60, 52, 0.75);
   }
 }
 
+@media only screen and (max-width: 599px) {
+  .slider-wrapper {
+    width: 200px !important;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .carousel-slider {
-    //max-height: 40vh !important;
+    max-height: 60vh !important;
+  }
+
+  .slider-wrapper {
+    width: unset !important;
   }
 }
 

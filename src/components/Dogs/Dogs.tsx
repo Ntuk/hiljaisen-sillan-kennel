@@ -39,7 +39,7 @@ function Dogs({ user }) {
         description: doc.data().description,
         size: doc.data().size,
         imageUrl: doc.data().imageUrl,
-        deceased: doc.data().deceased,
+        deceased: doc.data().deceased?.toDate(),
       }));
 
       setData(dogsList);

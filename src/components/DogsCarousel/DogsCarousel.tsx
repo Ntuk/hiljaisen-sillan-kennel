@@ -53,14 +53,18 @@ function DogsCarousel({ data, onDogChange }: DogsCarouselProps) {
 
   return (
     <Carousel
-      autoPlay={true}
+      className={'dogs-carousel'}
+      key={data.length}
+      autoPlay={false}
       infiniteLoop={true}
+      stopOnHover={true}
       interval={15000}
       onChange={handleOnChange}
       selectedItem={currentIndex}
     >
       {data.map((dog) => (
         <div key={dog.id}>
+          {/*{dog.deceased && <div className="in-memoriam">In memoriam</div>}*/}
           <img src={dog.imageUrl} alt={dog.name} />
         </div>
       ))}

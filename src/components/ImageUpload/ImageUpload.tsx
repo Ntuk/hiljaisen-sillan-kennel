@@ -35,8 +35,8 @@ function ImageUpload({ onImageUpload, onBase64Upload, previewImage }: ImageUploa
     return new Promise((resolve) => {
       Resizer.imageFileResizer(
         file,
-        500,
-        500,
+        450,
+        450,
         'PNG',
         100,
         0,
@@ -44,8 +44,8 @@ function ImageUpload({ onImageUpload, onBase64Upload, previewImage }: ImageUploa
           resolve(uri as string);
         },
         'base64',
-        500,
-        500
+        450,
+        450
       );
     });
   };
