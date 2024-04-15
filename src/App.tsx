@@ -5,15 +5,16 @@ import { auth, firebaseApp } from './firebase/firebase.ts';
 import Hero from './components/Hero/Hero.tsx';
 import About from './components/About/About.tsx';
 import News from './components/News/News.tsx';
-import Dogs from './components/Dogs/Dogs.tsx';
-// import Gallery from './components/Gallery/Gallery.tsx';
+import Dogs, { DogsData } from './components/Dogs/Dogs.tsx';
+import InMemoriam from './components/InMemoriam/InMemoriam.tsx';
 import Navbar from './components/Navbar/Navbar.tsx';
 import Sidebar from './components/Sidebar/Sidebar.tsx';
-// import AuthPage from './components/Auth/Auth.tsx';
 import { ToastContainer } from "react-toastify";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [dogsData, setDogsData] = useState<DogsData[]>([]);
+  // const [activeDog, setActiveDog] = useState<DogsData | null>(null);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -55,14 +56,13 @@ function App() {
         <Navbar user={user} onLogout={handleLogout} />
         <Sidebar className={windowWidth < 934 ? 'mobile-sidebar' : ''} />
         <Routes>
-          {/*<Route path="/auth" element={<AuthPage />} />*/}
           <Route path="/" element={
             <>
               <Hero/>
               <News user={user} />
               <About user={user} />
-              <Dogs user={user} />
-              {/*<Gallery />*/}
+              <Dogs user={user} setDogsData={setDogsData} />
+              <InMemoriam dogsData={dogsData} />
             </>
           } />
         </Routes>

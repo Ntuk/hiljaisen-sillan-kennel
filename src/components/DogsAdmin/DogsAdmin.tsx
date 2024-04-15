@@ -47,6 +47,7 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
   const birthdayRef = useRef<HTMLInputElement>(null);
   const deceasedRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const sizeRef = useRef<HTMLInputElement>(null);
 
 
   useEffect(() => {
@@ -103,6 +104,12 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
     const newName = nameRef.current?.value;
     // Retrieve values from other input fields as needed
 
+    const existingDog = dogs.find(dog => dog.name === newName);
+    if (existingDog) {
+      notifyError(`${existingDog.name} on jo lisätty.`);
+      return;
+    }
+
     if (newName) {
       const newFormData: DogsFormData = {
         name: newName,
@@ -157,7 +164,6 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
     };
 
     fetchDogs();
-    console.log('selectedDog', selectedDog);
   }, []);
 
   const handleDogSelect = (dog: DogsFormData) => {
@@ -229,60 +235,26 @@ function DogsAdmin({ formData, setIsAdminOpen, onFormSubmit }: DogsAdminProps) {
                            onChange={(e) => setDad(e.target.value)}/>
                   </div>
                   <div className={'item header'}>
+                    <span>Rotu/koko:</span>
+                    <input type="text" name="size" defaultValue={size} ref={sizeRef}
+                           onChange={(e) => setSize(e.target.value)}/>
+                  </div>
+                  <div className={'item header'}>
                     <span>Syntymäpäivä:</span>
                     <input type="date" name="birthday"
                            defaultValue={birthday instanceof Date ? birthday.toISOString().substr(0, 10) : ''}
-                           ref={birthdayRef} onChange={(e) => setFormattedBirthday(e.target.value)} />
+                           ref={birthdayRef} onChange={(e) => setFormattedBirthday(e.target.value)}/>
                   </div>
                   <div className={'item header'}>
-                    <span>Kuolinpäivä <FaCross /> (voi jättää täyttämättä):</span>
+                    <span>Kuolinpäivä <FaCross/> (voi jättää täyttämättä):</span>
                     <input type="date" name="deceased"
                            defaultValue={deceased instanceof Date ? deceased.toISOString().substr(0, 10) : ''}
-                           ref={deceasedRef} onChange={(e) => setFormattedDeceased(e.target.value)} />
+                           ref={deceasedRef} onChange={(e) => setFormattedDeceased(e.target.value)}/>
                   </div>
                   <div className={'item header'}>
                     <span>Kuvaus:</span>
                     <textarea name="description" defaultValue={description} ref={descriptionRef}
                               onChange={(e) => setDescription(e.target.value)}/>
-                  </div>
-                  <div className={'item header'}>
-                    <span>Koko:</span>
-                    <div>
-                      <label>
-                        <input
-                          type="radio"
-                          name="size"
-                          value="kaniini"
-                          checked={size === "kaniini"}
-                          onChange={(e) => setSize(e.target.value)}
-                        />
-                        Kaniini
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          type="radio"
-                          name="size"
-                          value="kääpiö"
-                          checked={size === "kääpiö"}
-                          onChange={(e) => setSize(e.target.value)}
-                        />
-                        Kääpiö
-                      </label>
-                    </div>
-                    <div>
-                      <label>
-                        <input
-                          type="radio"
-                          name="size"
-                          value="normaali"
-                          checked={size === "normaali"}
-                          onChange={(e) => setSize(e.target.value)}
-                        />
-                        Normaali
-                      </label>
-                    </div>
                   </div>
                   <div className={'item header'}>
                     <span>Kuva:</span>

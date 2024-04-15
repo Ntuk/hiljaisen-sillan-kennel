@@ -31,7 +31,7 @@ function DogInfo({ dogInfo }: DogInfoProps) {
       )}
       <span><b>Äiti:</b> {dogInfo.mom}</span>
       <span><b>Isä:</b> {dogInfo.dad}</span>
-      <span><b>Koko:</b> {dogInfo.size}</span>
+      <span><b>Rotu:</b> {dogInfo.size}</span>
       <span><b>Kuvaus:</b> {dogInfo.description}</span>
     </div>
   )

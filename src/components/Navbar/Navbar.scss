@@ -207,6 +207,22 @@ header {
   }
 }
 
+@media (max-width: 1200px) {
+  .nav-item {
+    font-size: 1.2rem !important;
+  }
+
+  .header-text {
+    font-size: 1.5rem !important;
+  }
+}
+
+@media (max-width: 934px) {
+  .header-text {
+    font-size: 2rem !important;
+  }
+}
+
 @media (max-width: 455px) {
   .header-text {
     font-size: 1.6rem !important;

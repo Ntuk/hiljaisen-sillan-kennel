@@ -20,7 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const navItems = ['Etusivu', 'Uutiset', 'Meistä', 'Koirat'];
+  const navItems = ['Etusivu', 'Uutiset', 'Meistä', 'Koirat', 'Muistoissamme'];
 
   useEffect(() => {
     const handleResize = () => {

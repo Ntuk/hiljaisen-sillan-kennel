@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 interface PageHeaderProps {
   title: string;
-  isAdminOpen: boolean;
+  isAdminOpen?: boolean;
   leftButton?: ReactNode
   rightButton?: ReactNode;
 }

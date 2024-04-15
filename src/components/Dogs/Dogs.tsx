@@ -20,7 +20,7 @@ export interface DogsData {
   deceased?: Date
 }
 
-function Dogs({ user }) {
+function Dogs({ user, setDogsData }) {
   const [data, setData] = useState<DogsData[]>([]);
   const [activeDog, setActiveDog] = useState<DogsData | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
@@ -42,7 +42,10 @@ function Dogs({ user }) {
         deceased: doc.data().deceased?.toDate(),
       }));
 
-      setData(dogsList);
+      const aliveDogsList = dogsList.filter(dog => dog.deceased === undefined);
+
+      setData(aliveDogsList);
+      setDogsData(dogsList);
     };
 
     fetchDogsData();
